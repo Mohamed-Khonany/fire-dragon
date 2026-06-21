@@ -1,0 +1,23 @@
+@keyframes dragon-flow {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 200%;
+  }
+}
+
+.dragon-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ff5a00,
+    #f5bf34,
+    transparent
+  );
+
+  background-size: 200% 100%;
+
+  animation: dragon-flow 4s linear infinite;
+}

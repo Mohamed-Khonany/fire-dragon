@@ -1,0 +1,155 @@
+.fire-wrapper {
+  --accent-1: #ff6600;
+  --accent-2: #ffcc00;
+  --accent-3: #ff2200;
+  --accent-4: #ff660055;
+  --light-1: #ff440028;
+  --light-2: #ff990028;
+  --duration: 3s;
+  --transition: 0.5s;
+}
+
+.fire-light-1 {
+  transition: opacity var(--transition) ease,
+    top var(--transition) ease,
+    left var(--transition) ease;
+  opacity: 0.8;
+  animation: light1Pulse var(--duration) ease-in-out infinite;
+}
+
+.fire-light-2 {
+  transition-duration: calc(var(--transition) * 2);
+  opacity: 0.6;
+  animation: light2Pulse var(--duration) ease-in-out infinite;
+}
+
+.fire-dot {
+  animation: dotOpac calc(var(--duration) * 0.5) linear infinite;
+  fill: var(--accent-1);
+}
+
+.fire-dot:nth-child(odd) {
+  animation-delay: calc(var(--duration) * 0.1);
+}
+
+.fire-line {
+  animation: dash var(--duration) ease-out infinite;
+  stroke-dasharray: 16 56;
+}
+
+.fire-line:nth-child(odd) {
+  animation-direction: normal;
+  animation-delay: calc(var(--duration) * 0.1);
+}
+
+.fire-ai-bg {
+  filter: drop-shadow(0px 0px 6px var(--accent-2));
+  animation: bgGlow var(--duration) ease-in-out infinite;
+}
+
+.fire-logo-btn {
+  animation: btnPulse var(--duration) ease-in-out infinite;
+}
+
+@keyframes light1Pulse {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    top: -20px;
+    left: -30px;
+  }
+
+  50% {
+    opacity: 1;
+    top: -30px;
+    left: -40px;
+  }
+}
+
+@keyframes light2Pulse {
+
+  0%,
+  100% {
+    opacity: 0.35;
+    bottom: -20px;
+    right: -20px;
+  }
+
+  50% {
+    opacity: 0.8;
+    bottom: -30px;
+    right: -30px;
+  }
+}
+
+@keyframes dotOpac {
+
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes bgGlow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0px 0px 3px var(--accent-3));
+  }
+
+  50% {
+    filter: drop-shadow(0px 0px 8px var(--accent-2));
+  }
+}
+
+@keyframes btnPulse {
+
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px #ff440022,
+      inset -1px -1px 1px 1px #000,
+      inset -2px -2px 2px 1px #ffffff22,
+      inset 1px 1px 1px 1px #000,
+      inset 2px 2px 2px 1px #ffffff22;
+    border-color: transparent;
+  }
+
+  50% {
+    box-shadow:
+      0 0 60px 0px #ff6600aa,
+      inset -1px -1px 1px 1px #000,
+      inset -2px -2px 2px 1px #ffffff22,
+      inset 1px 1px 1px 1px #000,
+      inset 2px 2px 2px 1px #ffffff22;
+  }
+
+  85% {
+    border-color: var(--accent-2);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-width: 0;
+    stroke-dashoffset: 10;
+    stroke: var(--accent-4);
+  }
+
+  50% {
+    stroke-width: 0.5;
+    stroke-dashoffset: 88;
+    stroke: var(--accent-1);
+  }
+
+  100% {
+    stroke-width: 0;
+    stroke-dashoffset: 166;
+    stroke: var(--accent-4);
+  }
+}

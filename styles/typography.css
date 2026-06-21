@@ -1,0 +1,20 @@
+@theme {
+
+  --font-display: "Montserrat";
+  --font-heading: "Montserrat";
+  --font-body: "Inter";
+  --font-mono: "JetBrains Mono";
+
+  --text-display-xl: 80px;
+  --text-display-xl-mobile: 48px;
+
+  --text-headline-lg: 40px;
+  --text-headline-lg-mobile: 32px;
+
+  --text-headline-md: 24px;
+
+  --text-body-lg: 18px;
+  --text-body-md: 16px;
+
+  --text-label-mono: 14px;
+}
