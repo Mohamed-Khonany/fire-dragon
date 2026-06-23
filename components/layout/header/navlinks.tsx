@@ -16,7 +16,7 @@ export const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden lg:flex items-center justify-center gap-5">
+    <nav className="hidden lg:flex items-center justify-center gap-5 py-7">
       {navLinks.map((link) => {
         const isActive =
           pathname === link.href ||
