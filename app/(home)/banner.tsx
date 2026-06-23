@@ -1,20 +1,43 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../../assets/images/logo/logo-banner.png";
 
+import { useEffect, useState } from "react";
+
 export default function Banner() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-black gap-8 sm:px-32 lg:px-16">
+    <div className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-40 px-16 bg-black gap-8 sm:px-32 lg:px-16">
       <Image
-        className=""
         src={Logo}
         alt="fire-dragon-logo"
         width={300}
         height={300}
+        style={{
+          opacity: Math.max(1 - scrollY / 300, 0),
+          transform: `
+      translateY(${scrollY * 0.25}px)
+      scale(${Math.max(1 - scrollY / 1000, 0.7)})
+    `,
+          transition: "opacity 0.1s linear",
+        }}
       />
 
       <div className="flex flex-col items-center gap-4 text-center">
-        <span className=" text-5xl font-bold text-on-surface tracking-tighter ">
+        <span className=" text-5xl font-extrabold text-on-surface tracking-widest ">
           <span className="text-transparent bg-clip-text bg-linear-to-r from-primary-container to-secondary">
             Fire{" "}
           </span>{" "}

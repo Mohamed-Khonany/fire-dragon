@@ -1,13 +1,13 @@
 import './animated-path.css';
 
 // animated Path
-export const Path = ({ d, strokeWidth, strokeLinecap }: { d: string; strokeWidth: string; strokeLinecap?: any }) => {
+export const Path = ({ d, strokeWidth }: { d: string; strokeWidth: number; }) => {
   return (
     <>
       {/* path-bg elements */}
-      <path strokeWidth={parseFloat(strokeWidth) } strokeLinecap={strokeLinecap } className="stroke-white/10" d={d}></path>
+      <path strokeWidth={strokeWidth }  className="stroke-white/10" d={d}></path>
       {/* animated lines */}
-      <path strokeWidth={parseFloat(strokeWidth)} strokeLinecap={strokeLinecap} className="fire-line" d={d}></path>
+      <path strokeWidth={strokeWidth}  className="fire-line" d={d}></path>
     </>
   );
 };
