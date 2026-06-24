@@ -2,14 +2,15 @@
 
 import "./animated-path.css";
 import { Line, Path } from "./animated-path";
-
+import Image from "next/image";
+import Logo from "../../assets/images/logo/logo-banner.png";
 export default function AnimatedBanner() {
   return (
     <>
       <div className="fire-wrapper relative flex items-center justify-center w-max h-max">
         {/* Glow light top-left */}
         <div
-          className="fire-light-1 pointer-events-none absolute rounded-full z-10"
+          className="fire-light-1 pointer-events-none absolute rounded-full "
           style={{
             top: "-20px",
             left: "-30px",
@@ -33,6 +34,23 @@ export default function AnimatedBanner() {
             zIndex: -1,
           }}
         />
+
+        <Image
+          src={Logo}
+          alt="fire-dragon-logo"
+          width={300}
+          height={300}
+          className="z-10 absolute -bottom-7 left-0 right-0 m-auto pointer-events-none"
+          style={{
+            opacity: Math.max(1 - scrollY / 300, 0),
+            transform: `
+          translateY(${scrollY * 0.25}px)
+          scale(${Math.max(1 - scrollY / 1000, 0.7)})
+          `,
+            transition: "opacity 0.1s linear",
+          }}
+        />
+
         {/* Animated SVG background */}
         <svg
           className="fire-ai-bg absolute -top-110"
@@ -70,27 +88,25 @@ export default function AnimatedBanner() {
 
           <Path d="M126.06,123.58v-10.37c0-.72-.29-1.41-.8-1.92l-4.28-4.28c-.51-.51-.8-1.2-.8-1.92v-12.37" />
           <circle className="fire-dot" cx="120.19" cy="91.54" r="1.17" />
-          
+
           <Path d="M165.96,123.58v-18.37c0-.72.29-1.41.8-1.92l4.28-4.28c.51-.51.8-1.2.8-1.92v-14.37" />
           <circle className="fire-dot" cx="171.83" cy="81.54" r="1.17" />
-          
+
           <Path d="M173.94,123.58v-10.37c0-.72.29-1.41.8-1.92l4.28-4.28c.51-.51.8-1.2.8-1.92v-10.69" />
           <circle className="fire-dot" cx="179.81" cy="93.23" r="1.17" />
-          
+
           <Path d="M134.04,123.58v-20.37c0-.72-.29-1.41-.8-1.92l-4.28-4.28c-.51-.51-.8-1.2-.8-1.92v-9.37" />
           <circle className="fire-dot" cx="128.17" cy="84.54" r="1.17" />
-
 
           {/*Right lines*/}
           <Line x1="176.04" y1="150" x2="217.32" y2="150" />
           <circle className="fire-dot" cx="218.49" cy="150" r="1.17" />
-          
+
           <Path d="M176.04,153.99h13.37c.72,0,1.41.29,1.92.8l4.28,4.28c.51.51,1.2.8,1.92.8h14.37" />
           <circle className="fire-dot" cx="213.08" cy="159.86" r="1.17" />
 
           <Path d="M176.04,146.01h15.37c.72,0,1.41-.29,1.92-.8l4.28-4.28c.51-.51,1.2-.8,1.92-.8h9.37" />
           <circle className="fire-dot" cx="210.08" cy="140.14" r="1.17" />
-
 
           {/*Left lines*/}
           <Line x1="123.96" y1="150" x2="82.68" y2="150" />
@@ -98,15 +114,14 @@ export default function AnimatedBanner() {
 
           <Path d="M123.96,146.01h-13.37c-.72,0-1.41-.29-1.92-.8l-4.28-4.28c-.51-.51-1.2-.8-1.92-.8h-14.37" />
           <circle className="fire-dot" cx="86.92" cy="140.14" r="1.17" />
-          
+
           <Path d="M123.96,153.99h-15.37c-.72,0-1.41.29-1.92.8l-4.28,4.28c-.51.51-1.2.8-1.92.8h-9.37" />
           <circle className="fire-dot" cx="89.92" cy="159.86" r="1.17" />
-
 
           {/*Down lines*/}
           <Line x1="150" y1="176.42" x2="150" y2="222.69" />
           <circle className="fire-dot" cx="150" cy="223.87" r="1.17" />
-          
+
           <Line x1="142.02" y1="176.42" x2="142.02" y2="207.92" />
           <circle className="fire-dot" cx="142.02" cy="209.09" r="1.17" />
 
@@ -115,16 +130,15 @@ export default function AnimatedBanner() {
 
           <Path d="M173.94,176.42v10.37c0,.72.29,1.41.8,1.92l4.28,4.28c.51.51.8,1.2.8,1.92v12.37" />
           <circle className="fire-dot" cx="179.81" cy="208.46" r="1.17" />
-          
+
           <Path d="M134.04,176.42v18.37c0,.72-.29,1.41-.8,1.92l-4.28,4.28c-.51.51-.8,1.2-.8,1.92v14.37" />
           <circle className="fire-dot" cx="128.17" cy="218.46" r="1.17" />
-          
+
           <Path d="M126.06,176.42v10.37c0,.72-.29,1.41-.8,1.92l-4.28,4.28c-.51.51-.8,1.2-.8,1.92v10.69" />
           <circle className="fire-dot" cx="120.19" cy="206.77" r="1.17" />
-          
+
           <Path d="M165.96,176.42v20.37c0,.72.29,1.41.8,1.92l4.28,4.28c.51.51.8,1.2.8,1.92v9.37" />
           <circle className="fire-dot" cx="171.83" cy="215.46" r="1.17" />
-
         </svg>
       </div>
     </>
