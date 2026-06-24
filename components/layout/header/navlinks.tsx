@@ -34,7 +34,7 @@ export const NavLinks = () => {
                 width="180"
                 height="40"
               >
-                <Path d="M15,30 H50 C70,30 70,5 100,5 H120" strokeWidth={2} />
+                <Path d="M15,30 H50 C70,30 70,5 100,5 H120" strokeWidth={3} />
                 <circle className="fire-dot" cx="15" cy="30" r="2" />
                 <circle className="fire-dot" cx="120" cy="5" r="2" />
               </svg>

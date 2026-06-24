@@ -1,13 +1,23 @@
-import './animated-path.css';
+import "./animated-path.css";
 
 // animated Path
-export const Path = ({ d, strokeWidth }: { d: string; strokeWidth: number; }) => {
+export const Path = ({
+  d,
+  strokeWidth,
+}: {
+  d: string;
+  strokeWidth?: number;
+}) => {
   return (
     <>
       {/* path-bg elements */}
-      <path strokeWidth={strokeWidth }  className="stroke-white/10" d={d}></path>
+      <path
+        strokeWidth={strokeWidth || 0.5}
+        className="stroke-white/10"
+        d={d}
+      ></path>
       {/* animated lines */}
-      <path strokeWidth={strokeWidth}  className="fire-line" d={d}></path>
+      <path strokeWidth={strokeWidth || 0.5} className="fire-line" d={d}></path>
     </>
   );
 };

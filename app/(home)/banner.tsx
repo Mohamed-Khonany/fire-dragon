@@ -5,6 +5,7 @@ import Link from "next/link";
 import Logo from "../../assets/images/logo/logo-banner.png";
 
 import { useEffect, useState } from "react";
+import AnimatedBanner from "@/components/animated-path/animated-banner";
 
 export default function Banner() {
   const [scrollY, setScrollY] = useState(0);
@@ -29,12 +30,13 @@ export default function Banner() {
         style={{
           opacity: Math.max(1 - scrollY / 300, 0),
           transform: `
-      translateY(${scrollY * 0.25}px)
-      scale(${Math.max(1 - scrollY / 1000, 0.7)})
-    `,
+          translateY(${scrollY * 0.25}px)
+          scale(${Math.max(1 - scrollY / 1000, 0.7)})
+          `,
           transition: "opacity 0.1s linear",
         }}
       />
+        <AnimatedBanner />
 
       <div className="flex flex-col items-center gap-4 text-center">
         <span className=" text-5xl font-extrabold text-on-surface tracking-widest ">
