@@ -10,7 +10,7 @@ export const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 150);
+      setScrolled(window.scrollY > 100);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -53,10 +53,7 @@ export const Header = () => {
           <NavLogo />
         </div>
         <div
-          className={`
-    transition-all duration-500
-    ${scrolled ? "translate-x-0" : "-translate-x-36"}
-  `}
+          className={`transition-all duration-500 ${scrolled ? "translate-x-0" : "-translate-x-36"}`}
         >
           <NavLinks />
         </div>

@@ -1,8 +1,5 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import Logo from "../../assets/images/logo/logo-banner.png";
 
 import { useEffect, useState } from "react";
 import AnimatedBanner from "@/components/animated-path/animated-banner";
@@ -22,7 +19,7 @@ export default function Banner() {
 
   return (
     <div className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-64 px-16 bg-black gap-8 sm:px-32 lg:px-16">
-      <div className="justify-center items-center flex flex-col pt-72 gap-6 text-center">
+      <div className="justify-center items-center flex flex-col pt-52 gap-6 text-center">
       <AnimatedBanner />
 
         <div className="flex flex-col items-center gap-4 text-center z-10">
