@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import "./globals.css";
 import { Inter, Montserrat, JetBrains_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header/header";
@@ -19,7 +19,11 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fire Dragon",
+  title: {
+    default: "Fire Dragon",
+    template: "%s | Fire Dragon",
+    absolute: ""
+  },
   description: "Mohamed Khonany brand Portfolio website",
 };
 
@@ -34,7 +38,7 @@ export default function RootLayout({
       className={`${inter.variable} ${montserrat.variable} ${mono.variable} `}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
+        <Header isHome={true} />
         {children}
       </body>
     </html>

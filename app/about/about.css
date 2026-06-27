@@ -1,0 +1,52 @@
+:root {
+    --fire-orange: #ff5a00;
+    --radiant-orange: #ffb59a;
+}
+
+body {
+    background-color: #050505;
+    color: #e3e2e2;
+    overflow-x: hidden;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.magnetic-hover {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glow-on-hover:hover {
+    box-shadow: 0 0 20px rgba(255, 90, 0, 0.4);
+    border-color: var(--fire-orange);
+}
+
+.circuit-bg {
+    background-image: radial-gradient(circle at 2px 2px, rgba(255, 107, 0, 0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+}
+
+[dir="rtl"] {
+    font-family: 'Inter', sans-serif;
+    /* Placeholder for Arabic font */
+}
+
+.glass-panel {
+    background: rgba(13, 14, 15, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+.fire-gradient-text {
+    background: linear-gradient(to right, #ffb59a, #ff5a00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

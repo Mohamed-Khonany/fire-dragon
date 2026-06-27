@@ -5,18 +5,20 @@ import { NavLinks } from "./navlinks";
 import { NavButtons } from "./navbuttons";
 import { NavLogo } from "./navlogo";
 
-export const Header = () => {
+export const Header = ({isHome = false}: {isHome: boolean}) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
+      setScrolled(window.scrollY > 300);
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
+  const isHomePage = isHome && scrolled;
 
   return (
     <header
@@ -24,7 +26,7 @@ export const Header = () => {
     fixed top-0 left-0 w-full z-50
     transition-all duration-500
     ${
-      scrolled
+      isHomePage
         ? `
           bg-surface/80
           backdrop-blur-xl
@@ -39,12 +41,11 @@ export const Header = () => {
   `}
     >
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop pt-2  max-w-container-max mx-auto">
-        {/* {scrolled && <NavLogo scrolled={scrolled}/>} */}
         <div
           className={`
     transition-all duration-500
     ${
-      scrolled
+      isHomePage
         ? "opacity-100 translate-x-0 scale-100"
         : "opacity-0 -translate-x-6 scale-75"
     }
@@ -53,7 +54,7 @@ export const Header = () => {
           <NavLogo />
         </div>
         <div
-          className={`transition-all duration-500 ${scrolled ? "translate-x-0" : "-translate-x-36"}`}
+          className={`transition-all duration-500 ${isHomePage ? "translate-x-0" : "-translate-x-36"}`}
         >
           <NavLinks />
         </div>
