@@ -2,6 +2,7 @@ import "./about.css";
 
 
 import AboutSection from "./aboutsection";
+import TechnicalForge from "./technicalForge";
 
 export default function AboutPage() {
   return (
@@ -12,135 +13,8 @@ export default function AboutPage() {
       <AboutSection />
 
       {/* <!-- Skills & Tools Grid --> */}
-      <section
-        className="py-stack-lg px-margin-desktop max-w-container-max mx-auto"
-        id="skills"
-      >
-        <div className="mb-stack-md text-center">
-          <h2 className="font-headline-lg text-headline-lg mb-2">
-            TECHNICAL <span className="fire-gradient-text">FORGE</span>
-          </h2>
-          <div className="h-1 w-24 bg-primary-container mx-auto"></div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-          {/* <!-- Group: Languages --> */}
-          <div className="glass-panel p-stack-md rounded-xl hover:-translate-y-1 transition-transform">
-            <h3 className="font-headline-md text-primary mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined">terminal</span>{" "}
-              Languages
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                JavaScript (ES6+)
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                TypeScript
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Python
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Go
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                SQL
-              </span>
-            </div>
-          </div>
-          {/* <!-- Group: Frontend --> */}
-          <div className="glass-panel p-stack-md rounded-xl hover:-translate-y-1 transition-transform">
-            <h3 className="font-headline-md text-primary mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined">data_object</span>{" "}
-              Frontend
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                React / Next.js
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Tailwind CSS
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Framer Motion
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Redux Toolkit
-              </span>
-            </div>
-          </div>
-          {/* <!-- Group: Mobile --> */}
-          <div className="glass-panel p-stack-md rounded-xl hover:-translate-y-1 transition-transform">
-            <h3 className="font-headline-md text-primary mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined">smartphone</span>{" "}
-              Mobile
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                React Native
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Flutter
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Expo
-              </span>
-            </div>
-          </div>
-          {/* <!-- Group: Backend --> */}
-          <div className="glass-panel p-stack-md rounded-xl hover:-translate-y-1 transition-transform">
-            <h3 className="font-headline-md text-primary mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined">storage</span> Backend
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Node.js / Express
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                PostgreSQL
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                MongoDB
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Redis
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                GraphQL
-              </span>
-            </div>
-          </div>
-          {/* <!-- Group: Tools --> */}
-          <div className="glass-panel p-stack-md rounded-xl hover:-translate-y-1 transition-transform">
-            <h3 className="font-headline-md text-primary mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined">build</span> Tools
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Docker
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                AWS / GCP
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                GitHub Actions
-              </span>
-              <span className="px-3 py-1 border border-primary-container/40 text-primary font-label-mono text-sm rounded-full">
-                Figma
-              </span>
-            </div>
-          </div>
-          {/* <!-- CTA Cell --> */}
-          <div className="bg-primary-container p-stack-md rounded-xl flex flex-col justify-center items-center text-on-primary-container text-center gap-4 glow-on-hover">
-            <p className="font-headline-md font-bold">Need a Custom Build?</p>
-            <a
-              className="bg-on-primary-container text-primary-container px-6 py-2 rounded-full font-bold font-label-mono hover:bg-on-primary-container/90 transition-all"
-              href="#contact"
-            >
-              LET'S TALK
-            </a>
-          </div>
-        </div>
-      </section>
+      <TechnicalForge />
+
       {/* <!-- "How I Work" Block --> */}
       <section className="py-stack-xl px-margin-desktop bg-surface-container-lowest/50">
         <div className="max-w-container-max mx-auto">
