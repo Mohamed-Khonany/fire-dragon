@@ -269,50 +269,28 @@ export default function TechnicalForge() {
       />
 
       <div className="relative mx-auto max-w-5xl">
-        <h2 className="mb-14 text-center text-md font-semibold uppercase tracking-[0.35em] text-zinc-300">
+        <h1 className="mb-14 text-center text-lg font-semibold uppercase tracking-[0.35em] text-zinc-300">
           Technical{" "}
           <span className="relative inline-block text-orange-400">
             Forge
             <span className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-orange-500" />
           </span>
-        </h2>
+        </h1>
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 justify-center items-center">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:items-stretch">
             {row1.map((category) => (
               <SkillCard key={category.title} {...category} />
             ))}
           </div>
 
-          <div className="mx-auto grid w-full grid-cols-1 gap-6 md:w-2/3 md:grid-cols-2">
+          <div className="mx-auto grid grid-cols-1 gap-8 md:w-2/3 md:grid-cols-2">
             {row2.map((category) => (
               <SkillCard key={category.title} {...category} />
             ))}
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        @media (prefers-reduced-motion: no-preference) {
-          .skill-card {
-            animation: forgeFadeUp 0.5s ease-out both;
-          }
-          .skill-badge {
-            animation: forgeFadeUp 0.45s ease-out both;
-          }
-        }
-
-        @keyframes forgeFadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </section>
   );
 }
