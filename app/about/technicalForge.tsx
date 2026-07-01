@@ -269,7 +269,7 @@ export default function TechnicalForge() {
       />
 
       <div className="relative mx-auto max-w-5xl">
-        <h2 className="mb-14 text-center text-sm font-semibold uppercase tracking-[0.35em] text-zinc-300">
+        <h2 className="mb-14 text-center text-md font-semibold uppercase tracking-[0.35em] text-zinc-300">
           Technical{" "}
           <span className="relative inline-block text-orange-400">
             Forge

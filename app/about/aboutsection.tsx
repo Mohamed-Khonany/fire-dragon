@@ -21,18 +21,13 @@ export default function AboutSection() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute bg-background/90 z-1 -bottom-4 -right-4 glass-card p-6 rounded-xl border border-primary-container/80 glow-effect">
-              <div className="absolute inset-1 bg-primary-container blur-3xl opacity-40 transition-opacity"></div>
-              <div className=" bg-background/90 z-10 ">
-                <p className="font-label-mono text-3xl font-bold text-primary">
-                  02+
-                </p>
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant">
-                  <span className="lang-en font-label-mono text-primary/50">
-                    Years of Exp
-                  </span>
-                </p>
-              </div>
+            <div className="absolute -bottom-4 -right-4  rounded-xl bg-background/90 border border-white/10 p-5 transition-all glow-effect duration-400 ease-out hover:-translate-y-0.75 hover:shadow-[0_8px_24px_rgba(0,0,0,0.6),0_0_0_1px_rgba(249,115,22,0.25)]">
+              <p className="text-2xl font-bold leading-none tracking-tight transition-colors duration-300 hover:text-[#fb923c] text-[#f97316]">
+                02+
+              </p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                Years of Experience
+              </p>
             </div>
           </div>
           {/*  Right: Content  */}
@@ -40,7 +35,7 @@ export default function AboutSection() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <h1
-                  className="font-display-xl text-display-xl md:text-display-xl leading-none font-white tracking-tight text-on-surface font-extrabold"
+                  className="font-display-xl text-2xl md:text-7xl leading-none font-white tracking-tight text-on-surface font-extrabold"
                   id="my-name"
                 >
                   MOHAMED KHONANY
@@ -74,19 +69,19 @@ export default function AboutSection() {
               <button className="font-label-mono text-label-mono uppercase hover:text-primary border tracking-widest hover:border-on-surface px-6 py-2 rounded border-primary-container text-primary-container duration-300 transition-all">
                 Download CV
               </button>
-              <div className="flex items-center gap-4 px-4 text-on-surface">
+              <div className="flex items-center gap-4 px-4  transition-all ">
                 <Link
-                  className="flex items-center gap-2 px-5 py-3 glass-panel rounded-lg hover:text-primary-container  transition-all group"
+                  className="flex items-center gap-2 px-5 py-3 glass-panel rounded-lg text-on-surface hover:text-primary-container border border-on-surface/30 hover:border-primary-container transition-all group"
                   href="https://github.com"
                 >
-                  <Code className="text-primary-container" />
+                  <Code className="" />
                   <span className="font-label-mono">GITHUB</span>
                 </Link>
                 <Link
-                  className="flex items-center gap-2 px-5 py-3 glass-panel rounded-lg hover:text-primary-container transition-all group"
+                  className="flex items-center gap-2 px-5 py-3 glass-panel rounded-lg text-on-surface hover:text-primary-container border border-on-surface/30 hover:border-primary-container transition-all group"
                   href="https://linkedin.com"
                 >
-                  <User className="text-primary-container" />
+                  <User className="" />
                   <span className="font-label-mono">LINKEDIN</span>
                 </Link>
               </div>

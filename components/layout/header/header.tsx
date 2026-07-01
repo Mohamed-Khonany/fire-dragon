@@ -5,8 +5,11 @@ import { NavLinks } from "./navlinks";
 import { NavButtons } from "./navbuttons";
 import { NavLogo } from "./navlogo";
 
-export const Header = ({isHome = false}: {isHome: boolean}) => {
+import { usePathname } from "next/navigation";
+
+export const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +21,7 @@ export const Header = ({isHome = false}: {isHome: boolean}) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
-  const isHomePage = isHome && scrolled;
+  const isHomePage = pathname !== "/" || scrolled;
 
   return (
     <header

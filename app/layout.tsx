@@ -32,13 +32,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    
   return (
     <html
       lang="en"
       className={`${inter.variable} ${montserrat.variable} ${mono.variable} `}
     >
       <body className="min-h-full flex flex-col">
-        <Header isHome={true} />
+        <Header />
         {children}
       </body>
     </html>

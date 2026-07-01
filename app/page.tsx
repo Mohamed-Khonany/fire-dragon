@@ -1,14 +1,9 @@
-import Banner from "./(home)/banner";
-import About from "./(home)/about";
+import Home from "./(home)/home";
 
-export default function Home() {
+export default function Root() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-black dark:bg-black font-body ">
-      <Banner />
-      <About />
-      <Banner />
-      <Banner />
-      <Banner />
+      <Home />
     </div>
   );
 }

@@ -2,6 +2,9 @@ import "./about.css";
 
 
 import AboutSection from "./aboutsection";
+import Certifications from "./certifications";
+import Education from "./education";
+import PhilosophyOfTheForge from "./philosophyOfTheForge";
 import TechnicalForge from "./technicalForge";
 
 export default function AboutPage() {
@@ -15,64 +18,17 @@ export default function AboutPage() {
       {/* <!-- Skills & Tools Grid --> */}
       <TechnicalForge />
 
+      {/* Education */}
+      <Education />
+
+      {/* Certifications */}
+      <Certifications />
+
       {/* <!-- "How I Work" Block --> */}
-      <section className="py-stack-xl px-margin-desktop bg-surface-container-lowest/50">
-        <div className="max-w-container-max mx-auto">
-          <div className="mb-stack-lg">
-            <h2
-              className="font-headline-lg text-headline-lg"
-              id="how-work-title"
-            >
-              PHILOSOPHY OF THE{" "}
-              <span className="text-primary-container">FORGE</span>
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
-            <div className="flex items-start gap-stack-sm p-6 glass-panel rounded-xl border-l-4 border-l-primary-container">
-              <span className="material-symbols-outlined text-4xl text-primary-container">
-                auto_fix_high
-              </span>
-              <div>
-                <p className="font-body-lg text-on-surface" id="work-stmt-1">
-                  "I push every project until it feels fully polished."
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-stack-sm p-6 glass-panel rounded-xl border-l-4 border-l-primary-container">
-              <span className="material-symbols-outlined text-4xl text-primary-container">
-                token
-              </span>
-              <div>
-                <p className="font-body-lg text-on-surface" id="work-stmt-2">
-                  "I take ownership from UI design through backend integration."
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-stack-sm p-6 glass-panel rounded-xl border-l-4 border-l-primary-container">
-              <span className="material-symbols-outlined text-4xl text-primary-container">
-                bolt
-              </span>
-              <div>
-                <p className="font-body-lg text-on-surface" id="work-stmt-3">
-                  "I translate complex technical needs into smooth user
-                  experiences."
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-stack-sm p-6 glass-panel rounded-xl border-l-4 border-l-primary-container">
-              <span className="material-symbols-outlined text-4xl text-primary-container">
-                groups
-              </span>
-              <div>
-                <p className="font-body-lg text-on-surface" id="work-stmt-4">
-                  "I collaborate closely with stakeholders to ensure every pixel
-                  serves a purpose."
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PhilosophyOfTheForge />
+
+
+
       {/* Closing CTA */}
       <section
         className="py-stack-xl px-margin-desktop text-center max-w-container-max mx-auto"
