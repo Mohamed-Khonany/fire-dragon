@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Work() {
   return (
-    <div className="bg-background w-full h-full justify-center items-center flex flex-col pt-40">
+    <main className="bg-background w-full h-full justify-center items-center flex flex-col pt-40">
       <section className="relative overflow-hidden mb-stack-xl flex flex-col items-center text-center text-on-surface">
         <div className="absolute inset-0 circuit-bg -z-10 opacity-60"></div>
         <h1 className="font-display-xl font-extrabold text-display-xl-mobile md:text-display-xl tracking-tighter mb-stack-sm drop-shadow-lg">
@@ -22,6 +22,6 @@ export default function Work() {
       </section>
       <WorkExperienceSection />
       <Closing />
-    </div>
+    </main>
   );
 }
