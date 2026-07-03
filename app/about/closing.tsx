@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { Download, Mail } from "lucide-react";
 
 export default function Closing() {
   return (
     <section
-      className="py-stack-xl px-margin-desktop text-center max-w-container-max mx-auto"
+      className="py-stack-md px-margin-desktop text-center max-w-container-max mx-auto"
       id="contact"
     >
       <div className="glass-panel p-stack-xl rounded-3xl relative overflow-hidden">
@@ -23,20 +24,22 @@ export default function Closing() {
             Whether you have a specific project in mind or just want to discuss
             technical architecture, my forge is always open.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-stack-sm">
+          <div className="flex flex-col sm:flex-row justify-center gap-stack-md">
             <Link
-              className="bg-primary-container text-on-primary-container font-headline-md px-10 py-5 rounded-xl font-black glow-on-hover transition-all magnetic-hover"
+              className="bg-primary-container text-on-primary-container flex flex-row gap-2 font-headline-md px-8 py-5 rounded-xl font-black glow-on-hover transition-all magnetic-hover"
               href="contact"
               id="btn-contact"
             >
-              GET IN TOUCH
+              <Mail className="inline-block" />
+              <span>GET IN TOUCH</span>
             </Link>
             <Link
-              className="border-2 border-primary-container text-primary-container font-headline-md px-10 py-5 rounded-xl font-black hover:bg-primary-container/10 transition-all magnetic-hover"
+              className="border-2 border-primary-container flex flex-row gap-2 text-primary-container font-headline-md px-8 py-5 rounded-xl font-black hover:bg-primary-container/10 transition-all magnetic-hover"
               href="#"
               id="btn-cv-bottom"
             >
-              DOWNLOAD CV
+              <Download className="inline-block" />
+              <span>DOWNLOAD CV</span>
             </Link>
           </div>
         </div>

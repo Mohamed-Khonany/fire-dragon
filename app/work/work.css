@@ -1,0 +1,29 @@
+        .magnetic-hover {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .magnetic-hover:hover {
+            transform: scale(1.05);
+        }
+
+        .fire-glow {
+            box-shadow: 0 0 30px rgba(255, 90, 0, 0.3);
+        }
+
+        .fire-glow-border {
+            border-color: rgba(255, 90, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 90, 0, 0.2);
+        }
+
+        .circuit-bg {
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 90, 0, 0.05) 0%, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ffb59a, #ff5a00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }

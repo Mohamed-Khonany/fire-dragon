@@ -499,7 +499,7 @@ export default function WorkExperienceSection() {
   return (
     <section
       id="work-experience"
-      className="w-full bg-background px-4 py-20 sm:px-8 lg:px-16"
+      className="w-full bg-background px-4 sm:px-8 lg:px-16"
     >
       <div className="mx-auto max-w-4xl ">
         <motion.div
