@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 interface Certificate {
   title: string;
@@ -20,7 +21,7 @@ const CERTIFICATES: Certificate[] = [
     date: "2024",
     description:
       "Awarded for outstanding collaboration, innovation, and technical excellence demonstrated in the graduation project.",
-    linkLabel: "VIEW RECOGNITION",
+    linkLabel: "VIEW CERTIFICATE",
     url: "https://drive.google.com/file/d/1XCY4981j3mpahgt23uvPyxgIanDIvK00/view?usp=sharing",
   },
   {
@@ -50,7 +51,7 @@ function CertCard({
 }: Certificate & { index: number }) {
   return (
     <div
-      className="cert-card group relative overflow-hidden rounded-xl border border-white/[0.07] bg-[#111114] p-6 transition-all duration-300 ease-out hover:-translate-y-[2px] hover:border-orange-500/30 hover:shadow-[0_0_30px_rgba(249,115,22,0.1)]"
+      className="cert-card group relative overflow-hidden rounded-xl border border-white/[0.07] bg-[#111114] p-6 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-orange-500/30 hover:shadow-[0_0_30px_rgba(249,115,22,0.1)]"
       style={{ animationDelay: `${index * 80}ms` }}
     >
       {/* Left orange accent bar */}
@@ -61,7 +62,7 @@ function CertCard({
         <h4 className="text-sm font-bold leading-snug text-zinc-100 transition-colors duration-300 group-hover:text-white">
           {title}
         </h4>
-        <span className="flex-shrink-0 text-sm text-zinc-400">{date}</span>
+        <span className="shrink-0 text-sm text-zinc-400">{date}</span>
       </div>
 
       {/* Issuer — orange, beneath title */}
@@ -75,7 +76,7 @@ function CertCard({
       )}
 
       {/* View link */}
-      <a
+      <Link
         href={url}
         target="_blank"
         rel="noopener noreferrer"
@@ -84,19 +85,23 @@ function CertCard({
       >
         {linkLabel}
         <ExternalLink className="h-3 w-3" strokeWidth={2.5} />
-      </a>
+      </Link>
     </div>
   );
 }
 
 export default function Certifications() {
   return (
-    <section className="relative w-full bg-[#070708] px-6 py-20 md:px-14">
+    <section className="relative w-full bg-[#0a0a0c] px-6 py-20 md:px-14">
       {/* Certifications 2-col grid */}
-      <p className="mb-4 md:text-md text-sm font-semibold uppercase tracking-[0.25em] text-zinc-500">
-        Certifications &amp; Awards
-      </p>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mb-10 flex flex-col items-center gap-2">
+        <p className="md:text-md text-sm text-center font-bold uppercase tracking-[0.25em] text-zinc-200">
+          Certifications
+        </p>
+        <span className="h-[2px] w-40 rounded-full bg-orange-500" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {CERTIFICATES.map((cert, i) => (
           <CertCard key={cert.title} index={i} {...cert} />
         ))}
@@ -104,7 +109,7 @@ export default function Certifications() {
 
       <style jsx global>{`
         @media (prefers-reduced-motion: no-preference) {
-          .edu-card {
+          .cert-card {
             animation: forgeFadeUp 0.5s ease-out both;
           }
           .course-tag {

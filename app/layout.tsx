@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   title: {
     default: "Fire Dragon",
     template: "%s | Fire Dragon",
-    absolute: ""
   },
   description: "Mohamed Khonany brand Portfolio website",
 };
@@ -32,7 +31,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    
   return (
     <html
       lang="en"

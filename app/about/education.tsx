@@ -87,7 +87,7 @@ export default function Education() {
   const { degree, institution, graduatedYear, coursework } = EDUCATION;
 
   return (
-    <section className="relative w-full bg-[#070708] px-6 py-20 md:px-14">
+    <section className="relative w-full bg-[#0a0a0c] px-6 py-20 md:px-14">
       {/* ── Section heading ──────────────────────────────────────────────── */}
       <div className="mb-10 flex flex-col items-center gap-2">
         <h2 className="text-md font-bold uppercase tracking-[0.35em] text-zinc-200">

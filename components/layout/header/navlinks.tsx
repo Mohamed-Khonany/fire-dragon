@@ -7,9 +7,9 @@ import "../../animated-path/animated-path.css";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/Projects", label: "Projects" },
-  { href: "/Work", label: "Work" },
-  { href: "/Contact", label: "Contact" },
+  { href: "/projects", label: "Projects" },
+  { href: "/work", label: "Work" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export const NavLinks = () => {

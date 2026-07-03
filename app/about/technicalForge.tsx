@@ -269,13 +269,12 @@ export default function TechnicalForge() {
       />
 
       <div className="relative mx-auto max-w-5xl">
-        <h1 className="mb-14 text-center text-lg font-semibold uppercase tracking-[0.35em] text-zinc-300">
-          Technical{" "}
-          <span className="relative inline-block text-orange-400">
-            Forge
-            <span className="absolute -bottom-1.5 left-0 h-[2px] w-full rounded-full bg-orange-500" />
-          </span>
-        </h1>
+        <div className="mb-10 flex flex-col items-center gap-2">
+          <h1 className="text-center text-lg font-semibold uppercase tracking-[0.35em] text-zinc-300">
+            Technical <span className="text-orange-400">Skills</span>
+          </h1>
+          <span className="h-0.5 w-24 rounded-full bg-orange-500" />
+        </div>
 
         <div className="flex flex-col gap-8 justify-center items-center">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:items-stretch">
