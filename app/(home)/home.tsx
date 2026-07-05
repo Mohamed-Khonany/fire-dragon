@@ -1,5 +1,6 @@
 import About from "./about";
 import Banner from "./banner";
+import Projects from "./projects";
 import Work from "./work";
 
 
@@ -8,8 +9,8 @@ export default function Home() {
     <>
       <Banner />
       <About />
+      <Projects />
       <Work />
-      <Banner />
       <Banner />
     </>
   );

@@ -31,7 +31,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { Apple, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { FaGooglePlay, FaAppStoreIos } from "react-icons/fa";
 
 import CodidLogo from "../../assets/images/logo/codid.jpg";
@@ -66,6 +66,7 @@ type SubProject = {
   description: string;
   logoSrc: string;
   screenshots: string[];
+  tools: string[];
   storeLinks: StoreLink[];
   achievements: string[];
 };
@@ -97,6 +98,20 @@ const EXPERIENCE: Experience = {
       description:
         "Pedigree and events platform for Arabian horse breeders and enthusiasts, providing access to horse pedigrees, stud profiles, and an events library.",
       logoSrc: StudbookLogo.src,
+      tools: [
+        "React Native",
+        "Redux Toolkit",
+        "NativeBase",
+        "React Native Animatable",
+        "React Native Maps",
+        "React Native PDF",
+        "Firebase Messaging",
+        "React Native Push Notification",
+        "i18next",
+        "Google Sign-In",
+        "Apple Authentication",
+        "Microsoft SignalR (real-time / WebSocket)",
+      ],
       screenshots: [
         StudbookScreenshot1.src,
         StudbookScreenshot2.src,
@@ -127,6 +142,20 @@ const EXPERIENCE: Experience = {
       description:
         "A comprehensive sports platform providing digital services for individual and team athletes across the sports ecosystem.",
       logoSrc: BuildupLogo.src,
+      tools: [
+        "React Native",
+        "Redux Toolkit",
+        "NativeBase",
+        "React Native Animatable",
+        "React Native Maps",
+        "React Native PDF",
+        "Firebase Messaging",
+        "React Native Push Notification",
+        "i18next",
+        "Google Sign-In",
+        "Apple Authentication",
+        "Microsoft SignalR (real-time / WebSocket)",
+      ],
       screenshots: [
         BuildupScreenshot1.src,
         BuildupScreenshot2.src,
@@ -282,7 +311,7 @@ function ImageCarousel({
 
   return (
     <div
-      className="group relative w-full overflow-hidden rounded-xl border"
+      className="group relative w-full overflow-hidden rounded-xl border hover:scale-110 transition-transform duration-300"
       style={{ borderColor: "rgba(255,107,0,0.35)", background: "#0a0a0a" }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -400,6 +429,13 @@ function SubProjectBlock({ project }: { project: SubProject }) {
           sits side by side from lg up so the row uses the full section width. */}
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px] lg:items-start lg:gap-10">
         <div className="min-w-0">
+        <div className="flex flex-wrap gap-2 mb-5">
+          {project.tools.map((tool) => (
+            <span key={tool} className="px-3 py-1 rounded-md border hover:-translate-y-0.75 border-white/20 text-on-surface-variant font-label-mono text-label-mono bg-surface-container-lowest hover:border-orange-500/60 hover:bg-white/10 transition-colors duration-300">
+              {tool}
+            </span>
+          ))}
+        </div>
           <p className="pb-4 leading-relaxed" style={{ color: "#F5F0E8" }}>
             {project.description}
           </p>
@@ -499,9 +535,9 @@ export default function WorkExperienceSection() {
   return (
     <section
       id="work-experience"
-      className="w-full bg-background px-4 sm:px-8 lg:px-16"
+      className="w-full px-4 sm:px-8 lg:px-16"
     >
-      <div className="mx-auto max-w-4xl ">
+      <div className="mx-auto max-w-6xl ">
         <motion.div
           {...fadeUp}
           className="mb-12 justify-center text-center items-center flex flex-col gap-2"
@@ -553,14 +589,10 @@ export default function WorkExperienceSection() {
                   </p>
                 </div>
                 <div className="flex md:flex-col md:gap-0.5 gap-3 text-center justify-center md:text-lg md:font-medium text-sm">
-                  <span
-                    style={{ color: "rgba(255,140,0,0.7)" }}
-                  >
+                  <span style={{ color: "rgba(255,140,0,0.7)" }}>
                     {EXPERIENCE.dateRange}
                   </span>
-                  <span
-                    style={{ color: "rgba(255,140,0,0.7)" }}
-                  >
+                  <span style={{ color: "rgba(255,140,0,0.7)" }}>
                     {EXPERIENCE.durationLabel}
                   </span>
                 </div>
