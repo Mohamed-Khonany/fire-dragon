@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Download, Mail } from "lucide-react";
+import { FireDev, FireSpan } from "@/components/fire/fire";
 
 export default function Closing() {
   return (
@@ -15,31 +16,29 @@ export default function Closing() {
             className="font-display-xl text-headline-lg md:text-display-xl mb-stack-sm"
             id="closing-headline"
           >
-            READY TO <span className="fire-gradient-text">IGNITE</span>?
+            READY TO <FireSpan>IGNITE</FireSpan>?
           </h2>
           <p
-            className="font-body-lg text-on-surface-variant max-w-xl mx-auto mb-stack-md"
+            className="md:text-body-lg text-sm md:max-w-xl md:mx-auto text-on-surface-variant mb-stack-md"
             id="closing-sub"
           >
             Whether you have a specific project in mind or just want to discuss
             technical architecture, my forge is always open.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-stack-md">
-            <Link
-              className="bg-primary-container text-on-primary-container flex flex-row gap-2 font-headline-md px-8 py-5 rounded-xl font-black glow-on-hover transition-all magnetic-hover"
-              href="contact"
-              id="btn-contact"
-            >
-              <Mail className="inline-block" />
-              <span>GET IN TOUCH</span>
+            <Link href="/contact" id="btn-contact">
+              <FireDev className="flex flex-row gap-2 px-8 py-5 rounded-xl font-semibold justify-center items-center text-center transition-all">
+                <Mail className="font-light" />
+                <span className="text-sm md:text-md">GET IN TOUCH</span>
+              </FireDev>
             </Link>
             <Link
-              className="border-2 border-primary-container flex flex-row gap-2 text-primary-container font-headline-md px-8 py-5 rounded-xl font-black hover:bg-primary-container/10 transition-all magnetic-hover"
+              className="border-2 border-linear-to-b from-primary-container to-secondary  flex flex-row gap-2 text-primary-container font-headline-md px-8 py-5 rounded-xl font-semibold hover:scale-105 transition-all magnetic-hover justify-center items-center text-center"
               href="#"
               id="btn-cv-bottom"
             >
-              <Download className="inline-block" />
-              <span>DOWNLOAD CV</span>
+              <Download className="font-light" />
+              <FireSpan className="text-xs md:text-md">DOWNLOAD CV</FireSpan>
             </Link>
           </div>
         </div>

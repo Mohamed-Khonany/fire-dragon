@@ -52,7 +52,7 @@ export const NavLinks = () => {
               </svg>
             )}
             <Link
-              className={`${isActive ? "text-primary-container hover:drop-shadow-[0_0_12px_#ffb000]" : "text-on-surface hover:text-primary hover:drop-shadow-[0_0_12px_#ffb000]"} font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300`}
+              className={`${isActive ? "text-transparent bg-clip-text bg-linear-to-r from-primary-container to-secondary hover:drop-shadow-[0_0_12px_#ffb000]" : "text-on-surface hover:text-on-surface hover:drop-shadow-[0_0_12px_#ffb000]"} font-bold uppercase tracking-wider hover:scale-105 transition-all duration-300`}
               href={link.href}
               key={link.href}
             >

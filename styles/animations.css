@@ -8,14 +8,38 @@
   }
 }
 
+@keyframes termBlink {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes forgeFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
 .dragon-line {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    #ff5a00,
-    #f5bf34,
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      #ff5a00,
+      #f5bf34,
+      transparent);
 
   background-size: 200% 100%;
 

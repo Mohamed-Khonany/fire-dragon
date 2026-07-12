@@ -3,8 +3,8 @@ import { Globe, Menu } from "lucide-react";
 export const NavButtons = () => {
   return (
     <div className="flex items-center gap-6">
-      <button className="block font-label-mono text-label-mono uppercase hover:text-primary text-primary-container duration-300 transition-all ">
-        <span className="flex flex-row gap-1 z-10 justify-center items-center text-lg shadow-background">
+      <button className="block font-label-mono text-label-mono uppercase hover:text-white text-primary-container duration-300 transition-all ">
+        <span className="flex flex-row gap-1 z-10 font-semibold text-[20px] justify-center text-center items-center text-lg shadow-background">
           <Globe size={22} /> EN
         </span>
       </button>
