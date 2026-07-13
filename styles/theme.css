@@ -46,6 +46,20 @@
   --color-error: #ffb4ab;
   --color-error-container: #93000a;
 
+  /* Flesh Store */
+
+  --color-flesh-store-primary: #CE048C;
+  --color-flesh-store-secondary: #4D0A8E;
+
+  /* Gradient */
+  --gradient-flesh-store: linear-gradient(180deg, var(--color-flesh-store-primary), var(--color-flesh-store-secondary));
+
+  /* Pe2pia */
+  --color-pe2pia-primary: #fea928;
+  --color-pe2pia-secondary: #ed8900;
+  --color-pe2pia-third: #00347D;
+
+
   /* Border */
 
   --color-outline: #ab897e;

@@ -52,6 +52,7 @@ import BuildupScreenshot5 from "../../assets/images/buildup/5.webp";
 import BuildupScreenshot6 from "../../assets/images/buildup/6.webp";
 
 import Link from "next/link";
+import { FireSpan } from "@/components/fire/fire";
 
 // ─────────────────────────────────────────────────────────────
 // Types & data
@@ -546,12 +547,9 @@ export default function WorkExperienceSection() {
             className="inline-block text-2xl font-semibold text-white sm:text-3xl"
             style={{ fontFamily: "Inter, Outfit, sans-serif" }}
           >
-            Work Experience
+            Work <FireSpan>Experience</FireSpan>
           </h2>
-          <div
-            className="h-0.75 w-20 rounded-full"
-            style={{ background: "#FF6B00" }}
-          />
+          <span className="h-0.5 w-24 rounded-full bg-linear-to-r from-primary-container to-secondary" />
         </motion.div>
 
         <motion.article {...fadeUp} className="relative pb-6">

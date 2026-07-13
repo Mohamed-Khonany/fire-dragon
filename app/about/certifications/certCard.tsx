@@ -32,20 +32,20 @@ export const CERTIFICATES: Certificate[] = [
     ImageURL: SahlLogo,
   },
   {
-    title: "ICDL Course Completion Certificate",
-    issuer: "Udemy — Mostafa Kamel",
-    date: "2022",
-    linkLabel: "VIEW CERTIFICATE",
-    url: "https://drive.google.com/file/d/1i18gFcXKxJ0V_EUQ3UXU3-eDXmKj-FFk/view?usp=sharing",
-    ImageURL: ICDLLogo,
-  },
-  {
     title: "Certificate of Achievement — ICPC",
     issuer: "ICPC",
     date: "2023",
     linkLabel: "VIEW CERTIFICATE",
     url: "https://drive.google.com/file/d/1zCRQ9fq_8ZVDKkUXs3lJ8kaugZtCl9SC/view?usp=sharing",
     ImageURL: ICPCLogo,
+  },
+  {
+    title: "ICDL Course Completion Certificate",
+    issuer: "Udemy — Mostafa Kamel",
+    date: "2022",
+    linkLabel: "VIEW CERTIFICATE",
+    url: "https://drive.google.com/file/d/1i18gFcXKxJ0V_EUQ3UXU3-eDXmKj-FFk/view?usp=sharing",
+    ImageURL: ICDLLogo,
   },
 ];
 
