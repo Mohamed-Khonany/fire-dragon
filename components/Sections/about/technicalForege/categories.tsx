@@ -32,13 +32,13 @@ import {
 } from "react-icons/si";
 import { FaDatabase } from "react-icons/fa6";
 
-import JavaIcon from "../../../public/assets/images/languageSkills/java.svg";
-import NativewindIcon from "../../../public/assets/images/languageSkills/nativewind.svg";
-import NativeBaseIcon from "../../../public/assets/images/languageSkills/nativeBase.svg";
-import FigmaIcon from "../../../public/assets/images/languageSkills/figma.svg";
-import AndroidStudioIcon from "../../../public/assets/images/languageSkills/androidStudio.svg";
-import TrelloIcon from "../../../public/assets/images/languageSkills/trello.svg";
-import VSCodeIcon from "../../../public/assets/images/languageSkills/vscode.svg";
+import JavaIcon from "../../../../public/assets/images/languageSkills/java.svg";
+import NativewindIcon from "../../../../public/assets/images/languageSkills/nativewind.svg";
+import NativeBaseIcon from "../../../../public/assets/images/languageSkills/nativeBase.svg";
+import FigmaIcon from "../../../../public/assets/images/languageSkills/figma.svg";
+import AndroidStudioIcon from "../../../../public/assets/images/languageSkills/androidStudio.svg";
+import TrelloIcon from "../../../../public/assets/images/languageSkills/trello.svg";
+import VSCodeIcon from "../../../../public/assets/images/languageSkills/vscode.svg";
 
 import Image from "next/image";
 

@@ -1,5 +1,5 @@
 // import ProjectsSection from "../projects/projectSection";
-import ProjectsSection from "../projects/Projects";
+import ProjectsSection from "./projectHero";
 
 export default function Projects() {
   return (

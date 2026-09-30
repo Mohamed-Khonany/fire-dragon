@@ -1,7 +1,7 @@
 import "./animated-path.css";
 import { Line, Path } from "./animated-path";
 import Image from "next/image";
-import Logo from "../../assets/images/logo/logo-banner.png";
+import Logo from "../../../public/assets/images/logo/logo-banner.png";
 
 export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
   return (
@@ -45,6 +45,7 @@ export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
               className="z-1 object-contain drop-shadow-lg transition-transform duration-500 ease-in-out transform "
               priority
             />
+            
           </div>
         )}
 

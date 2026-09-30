@@ -1,14 +1,14 @@
 "use client";
 
-import { FireSpan } from "@/components/fire/fire";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 
-import SahlLogo from "@/assets/images/certificate/SAHL.png";
-import ICPCLogo from "@/assets/images/certificate/ICPC.png";
-import ICDLLogo from "@/assets/images/certificate/udemy-ICDL.png";
+import SahlLogo from "@/public/assets/images/certificate/SAHL.png";
+import ICPCLogo from "@/public/assets/images/certificate/ICPC.png";
+import ICDLLogo from "@/public/assets/images/certificate/udemy-ICDL.png";
 import Image from "next/image";
-import LightboxModal from "@/components/LightboxModal/LightboxModal";
+import LightboxModal from "@/components/UI/LightboxModal/LightboxModal";
 import { useState } from "react";
 
 interface Certificate {

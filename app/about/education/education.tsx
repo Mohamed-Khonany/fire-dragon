@@ -1,8 +1,8 @@
 "use client";
 
-import { FireSpan } from "@/components/fire/fire";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
 import { CourseTag, EDUCATION } from "./CourseTag";
-import SCILogo from "@/assets/images/logo/SCI.png";
+import SCILogo from "@/public/assets/images/logo/SCI.png";
 import Image from "next/image";
 
 /**

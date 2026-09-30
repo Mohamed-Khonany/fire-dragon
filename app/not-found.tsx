@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Home, ArrowLeft, Flame, Terminal } from "lucide-react";
 
-import AnimatedBanner from "@/components/animated-path/animated-banner";
-import GlitchDigits from "./not-found-page/glitchDigits"
-import TerminalBlock from "./not-found-page/terminalBlock"
-
+import AnimatedBanner from "@/components/UI/animated-path/animated-banner";
+import GlitchDigits from "../components/UI/not-found/glitchDigits";
+import TerminalBlock from "../components/UI/not-found/terminalBlock";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
+import GradientText from "@/components/UI/fireSpan/gradientText";
 
 export default function NotFound() {
   const [mounted, setMounted] = useState(false);
@@ -51,12 +52,11 @@ export default function NotFound() {
         }}
       >
         {/* Top badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-500/6 px-3 py-1.5 text-sm font-semibold text-orange-400">
-          <Terminal className="h-3.5 w-3.5 text-orange-500" strokeWidth={2} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-400">
-            Page not found
-          </span>
-        </div>
+        {/* <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-500/6 px-3 py-1.5 text-sm font-semibold text-orange-400"> */}
+          <GradientText className="text-[11px] font-semibold uppercase tracking-[0.2em] flex flex-row gap-1 items-center justify-center"   showBorder={true} colors={["#ff5a00", "#cd9c01"]} animationSpeed={8}>
+            <Terminal className="h-3.5 w-3.5 text-orange-500" strokeWidth={2} />  Page not found
+          </GradientText>
+        {/* </div> */}
 
         {/* Divider */}
         <div className="flex items-center gap-4 w-full max-w-xs">
@@ -76,10 +76,9 @@ export default function NotFound() {
         </div>
 
         {/* Heading & sub-copy */}
-          <h1 className="text-xl font-bold text-zinc-100 md:text-2xl">
-            The Page you're looking for <span className="text-orange-500">doesn't exist</span>
-          </h1>
-
+        <h1 className="text-xl font-bold text-zinc-100 md:text-2xl">
+          The Page you're looking for <GradientText inline={true}>doesn't exist</GradientText>
+        </h1>
 
         {/* Terminal lines */}
         <TerminalBlock />
@@ -103,7 +102,6 @@ export default function NotFound() {
           </button>
         </div> */}
       </div>
-
     </main>
   );
 }

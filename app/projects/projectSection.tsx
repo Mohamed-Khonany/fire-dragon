@@ -1,6 +1,6 @@
 import { ArrowRight, Radio, Star } from "lucide-react";
 import Image from "next/image";
-import Pe2piaLogo from "../../assets/images/pe2pia/pe2pia.svg";
+import Pe2piaLogo from "../../public/assets/images/pe2pia/pe2pia.svg";
 import Link from "next/link";
 
 export default function ProjectSection() {

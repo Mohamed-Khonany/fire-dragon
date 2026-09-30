@@ -9,7 +9,7 @@
  * Requires: tailwindcss, framer-motion, next/image, lucide-react
  *   npm install framer-motion lucide-react
  *
- * ASSETS TO ADD (see TODOs below):
+ * public/assets TO ADD (see TODOs below):
  *   /public/logos/codid.png                        – Codid company logo
  *   /public/logos/studbook.png                      – Studbook app icon
  *   /public/logos/buildup.png                        – Buildup app icon
@@ -34,25 +34,25 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Apple, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { FaGooglePlay, FaAppStoreIos } from "react-icons/fa";
 
-import CodidLogo from "../../assets/images/logo/codid.jpg";
-import StudbookLogo from "../../assets/images/logo/studbook.png";
-import BuildupLogo from "../../assets/images/logo/buildup..png";
+import CodidLogo from "../../public/assets/images/logo/codid.jpg";
+import StudbookLogo from "../../public/assets/images/logo/studbook.png";
+import BuildupLogo from "../../public/assets/images/logo/buildup..png";
 
-import StudbookScreenshot1 from "../../assets/images/studbook/1.webp";
-import StudbookScreenshot2 from "../../assets/images/studbook/2.webp";
-import StudbookScreenshot3 from "../../assets/images/studbook/3.webp";
-import StudbookScreenshot4 from "../../assets/images/studbook/4.webp";
-import StudbookScreenshot5 from "../../assets/images/studbook/5.webp";
+import StudbookScreenshot1 from "../../public/assets/images/studbook/1.webp";
+import StudbookScreenshot2 from "../../public/assets/images/studbook/2.webp";
+import StudbookScreenshot3 from "../../public/assets/images/studbook/3.webp";
+import StudbookScreenshot4 from "../../public/assets/images/studbook/4.webp";
+import StudbookScreenshot5 from "../../public/assets/images/studbook/5.webp";
 
-import BuildupScreenshot1 from "../../assets/images/buildup/1.webp";
-import BuildupScreenshot2 from "../../assets/images/buildup/2.webp";
-import BuildupScreenshot3 from "../../assets/images/buildup/3.webp";
-import BuildupScreenshot4 from "../../assets/images/buildup/4.webp";
-import BuildupScreenshot5 from "../../assets/images/buildup/5.webp";
-import BuildupScreenshot6 from "../../assets/images/buildup/6.webp";
+import BuildupScreenshot1 from "../../public/assets/images/buildup/1.webp";
+import BuildupScreenshot2 from "../../public/assets/images/buildup/2.webp";
+import BuildupScreenshot3 from "../../public/assets/images/buildup/3.webp";
+import BuildupScreenshot4 from "../../public/assets/images/buildup/4.webp";
+import BuildupScreenshot5 from "../../public/assets/images/buildup/5.webp";
+import BuildupScreenshot6 from "../../public/assets/images/buildup/6.webp";
 
 import Link from "next/link";
-import { FireSpan } from "@/components/fire/fire";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
 
 // ─────────────────────────────────────────────────────────────
 // Types & data

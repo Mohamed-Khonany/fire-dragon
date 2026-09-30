@@ -20,28 +20,12 @@ export const Header = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
+
   const isHomePage = pathname !== "/" || scrolled;
 
   return (
     <header
-      className={`
-    fixed top-0 left-0 w-full z-50
-    transition-all duration-500
-    ${
-      isHomePage
-        ? `
-          bg-surface/80
-          backdrop-blur-xl
-          border-b border-white/10
-          shadow-[0_0_30px_rgba(255,90,0,0.1)]
-        `
-        : `
-          bg-transparent
-          border-transparent
-        `
-    }
-  `}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent border-transparent`}
     >
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop pt-2  max-w-container-max mx-auto">
         <div

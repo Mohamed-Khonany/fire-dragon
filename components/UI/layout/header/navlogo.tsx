@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo from "../../../assets/images/logo/logo.png"
+import Logo from "../../../../public/assets/images/logo/logo.png"
 import Link from "next/link";
 export const NavLogo = () => {
   return (

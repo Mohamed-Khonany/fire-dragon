@@ -1,6 +1,6 @@
 "use client";
 
-import { FireSpan } from "@/components/fire/fire";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
 import { CertCard, CERTIFICATES } from "./certCard";
 
 

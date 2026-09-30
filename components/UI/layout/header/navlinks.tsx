@@ -1,5 +1,5 @@
 "use client";
-import { Line, Path } from "@/components/animated-path/animated-path";
+import { Line, Path } from "@/components/UI/animated-path/animated-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../../animated-path/animated-path.css";

@@ -1,8 +1,8 @@
-import { FireSpan } from "@/components/fire/fire";
+import { FireSpan } from "@/components/UI/fireSpan/fire";
 import Image from "next/image";
 
-import Pe2piaLogo from "@/assets/images/projects/Pe2pia.png";
-import FlashStoreLogo from "@/assets/images/projects/FlashStore.png";
+import Pe2piaLogo from "@/public/assets/images/projects/Pe2pia.png";
+import FlashStoreLogo from "@/public/assets/images/projects/FlashStore.png";
 
 export default function ProjectsSection() {
   return (

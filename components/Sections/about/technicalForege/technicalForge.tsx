@@ -8,7 +8,7 @@ export default function TechnicalForge() {
   const [row1, row2] = [CATEGORIES.slice(0, 3), CATEGORIES.slice(3)];
 
   return (
-    <section className="relative w-full overflow-hidden bg-[#070708] px-6 py-20">
+    <div className="relative w-full overflow-hidden bg-[#070708] h-screen flex flex-col items-center justify-center">
       {/* soft vignette so the cards sit in a pool of light rather than flat black */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -17,8 +17,6 @@ export default function TechnicalForge() {
             "radial-gradient(60% 50% at 50% 35%, rgba(120,60,20,0.08), transparent 70%)",
         }}
       />
-
-      <div className="relative mx-auto max-w-5xl">
         <div className="mb-10 flex flex-col items-center gap-2">
           <h1 className="text-center text-lg font-semibold uppercase tracking-[0.35em] text-zinc-300">
             Technical <FireSpan >Skills</FireSpan>
@@ -38,8 +36,7 @@ export default function TechnicalForge() {
               <SkillCard key={category.title} {...category} />
             ))}
           </div>
-        </div>
       </div>
-    </section>
+    </div>
   );
 }

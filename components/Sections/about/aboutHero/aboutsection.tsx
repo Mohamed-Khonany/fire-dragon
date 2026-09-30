@@ -1,13 +1,14 @@
 import Image from "next/image";
-import "../../styles/typography.css";
-import Logo from "../../public/assets/images/logo/logo-banner.png";
+import "../../../../styles/typography.css";
+import Logo from "../../../../public/assets/images/logo/logo-banner.png";
 import Link from "next/link";
 import { Code, User } from "lucide-react";
 import { FireDev, FireSpan } from "@/components/UI/fireSpan/fire";
+import GradientText from "@/components/UI/fireSpan/gradientText";
 
 export default function AboutSection() {
   return (
-    <section className="py-stack-lg px-margin-mobile md:px-margin-desktop  backdrop-blur-sm">
+    <div className="h-screen relative py-stack-lg px-margin-mobile md:px-margin-desktop backdrop-blur-sm">
       <div className="max-w-container-max mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-stack-lg items-center">
           {/*  Left: Profile Frame  */}
@@ -23,9 +24,9 @@ export default function AboutSection() {
               />
             </div>
             <div className="absolute -bottom-4 -right-4  rounded-xl bg-background/90 border border-white/10 p-5 transition-all glow-effect duration-400 ease-out hover:-translate-y-0.75 hover:shadow-[0_8px_24px_rgba(0,0,0,0.6),0_0_0_1px_rgba(249,115,22,0.25)]">
-              <FireSpan className="text-2xl font-bold leading-none tracking-tight transition-colors duration-300 hover:text-[#fb923c] text-[#f97316]">
+              <GradientText  className="text-2xl font-bold leading-none tracking-tight transition-colors duration-300 hover:text-[#fb923c] text-[#f97316]">
                 02+
-              </FireSpan>
+              </GradientText>
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
                 Years of Experience
               </p>
@@ -41,9 +42,9 @@ export default function AboutSection() {
                 >
                   MOHAMED KHONANY
                 </h1>
-                <FireSpan className="md:text-xl text-sm tracking-widest uppercase font-bold">
+                <GradientText className="md:text-xl text-sm tracking-widest uppercase font-bold">
                   Frontend Developer | Mobile Developer
-                </FireSpan>
+                </GradientText>
               </div>
               <div className="font-body-lg text-body-lg max-w-2xl text-on-surface/80 leading-relaxed">
                 <p>
@@ -87,6 +88,6 @@ export default function AboutSection() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

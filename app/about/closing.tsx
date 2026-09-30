@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Download, Mail } from "lucide-react";
-import { FireDev, FireSpan } from "@/components/fire/fire";
+import { FireDev, FireSpan } from "@/components/UI/fireSpan/fire";
 
 export default function Closing() {
   return (
