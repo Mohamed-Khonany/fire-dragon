@@ -7,7 +7,7 @@ import { TraitCard, TRAITS } from "./TraitCart";
 // ─────────────────────────────────────────────
 export default function SoftSkills() {
   return (
-    <section className="relative w-full bg-[#070708] px-6 py-20 md:px-14">
+    <section className="relative w-full px-6 py-20 md:px-14">
       {/* Section heading */}
       <div className="mb-10 flex flex-col items-center gap-2">
         <h1 className="text-center text-lg font-semibold uppercase tracking-[0.35em] text-zinc-300">
