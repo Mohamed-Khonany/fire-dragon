@@ -1,97 +1,138 @@
 "use client";
+
 import { useRef } from "react";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
-
 import AboutSection from "./aboutHero/aboutsection";
 import TechnicalForge from "./technicalForege/technicalForge";
 import SoftSkills from "./softSkills/softSkills";
 
 import { aboutData } from "@/data/about";
+import AnimatedAbout from "@/components/UI/animated-path/animated-about";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function About() {
-  const pinRef = useRef<HTMLElement>(null); // full-screen viewport that gets pinned
-  const trackRef = useRef<HTMLDivElement>(null); // wide strip that moves sideways
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
+      const section = sectionRef.current;
       const track = trackRef.current;
-      if (!track) return;
+      if (!section || !track) return;
+      const slides = gsap.utils.toArray<HTMLElement>(".slide");
+      if (!slides.length) return;
 
-      const slides = gsap.utils.toArray<HTMLElement>(".slide", track);
-      if (slides.length < 2) return;
+      const getScrollDistance = () => {
+        return track.scrollWidth - window.innerWidth;
+      };
 
-      // Real horizontal distance, recalculated on every refresh/resize
-      const getDistance = () => track.scrollWidth - window.innerWidth;
-
-      const horizontal = gsap.to(track, {
-        x: () => -getDistance(),
+      const horizontalTween = gsap.to(track, {
+        x: () => -getScrollDistance(),
         ease: "none",
         scrollTrigger: {
-          trigger: pinRef.current,
+          trigger: section,
           pin: true,
           start: "top top",
-          end: () => `+=${getDistance()}`, // 1px scroll = 1px sideways movement
-          scrub: 0.8,
+          end: () => `+=${getScrollDistance()}`,
+          scrub: 1,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
-          // Soft magnet toward each slide so transitions feel intentional
-          snap: {
-            snapTo: 1 / (slides.length - 1),
-            duration: { min: 0.2, max: 0.6 },
-            delay: 0.05,
-            ease: "power2.inOut",
-          },
+          // snap: {
+          //   snapTo: 1 / (slides.length - 1),
+          //   duration: { min: 0.2, max: 0.5 },
+          //   delay: 0.05,
+          //   ease: "power2.inOut",
+          // },
         },
       });
 
-      // Per-slide content reveal, driven by the horizontal tween
       slides.forEach((slide, index) => {
         if (index === 0) return;
-        const elements = slide.querySelectorAll("h2, h3, p, img");
+
+        const elements = slide.querySelectorAll<HTMLElement>(
+          "h2, h3, p, img"
+        );
+
         if (!elements.length) return;
 
-        gsap.from(elements, {
-          y: 80,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: slide,
-            containerAnimation: horizontal,
-            start: "left 70%", // horizontal axis: slide's left edge at 70% of viewport width
-            toggleActions: "play none none reverse",
+        gsap.fromTo(
+          elements,
+          {
+            y: 60,
+            opacity: 0,
           },
-        });
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.08,
+            ease: "power3.out",
+
+            scrollTrigger: {
+              trigger: slide,
+
+              /*
+               * This allows ScrollTrigger to understand
+               * that the slide is moving horizontally.
+               */
+              containerAnimation: horizontalTween,
+
+              start: "left 75%",
+
+              toggleActions: "play reverse play reverse",
+
+              invalidateOnRefresh: true,
+            },
+          }
+        );
       });
 
-      // Images/fonts change layout after mount; re-measure once everything is loaded
-      const onLoad = () => ScrollTrigger.refresh();
-      window.addEventListener("load", onLoad);
-      return () => window.removeEventListener("load", onLoad);
+      const handleLoad = () => {
+        ScrollTrigger.refresh();
+      };
+
+      window.addEventListener("load", handleLoad);
+
+      return () => {
+        window.removeEventListener("load", handleLoad);
+      };
     },
-    { scope: pinRef },
+    {
+      scope: sectionRef,
+    }
   );
 
   return (
     <section
-      ref={pinRef}
+      ref={sectionRef}
       className="relative h-screen w-full overflow-hidden bg-background"
     >
-      <div ref={trackRef} className="flex h-full w-max will-change-transform">
-        <div className="slide relative flex h-full w-screen shrink-0 flex-col justify-center">
+
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <AnimatedAbout />
+      </div>
+
+      <div
+        ref={trackRef}
+        className="flex h-screen w-max will-change-transform"
+      >
+        {/* Slide 1 */}
+        <div className="slide relative flex h-screen w-screen shrink-0 flex-col justify-center">
           <AboutSection data={aboutData} />
         </div>
 
-        <div className="slide relative flex h-full w-screen shrink-0 flex-col justify-center">
+        {/* Slide 2 */}
+        <div className="slide relative flex h-screen w-screen shrink-0 flex-col justify-center">
           <TechnicalForge />
         </div>
 
-        <div className="slide relative flex h-full w-screen shrink-0 flex-col justify-center">
+        {/* Slide 3 */}
+        <div className="slide relative flex h-screen w-screen shrink-0 flex-col justify-center">
           <SoftSkills />
         </div>
       </div>

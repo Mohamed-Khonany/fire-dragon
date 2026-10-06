@@ -4,9 +4,11 @@ import "./animated-path.css";
 export const Path = ({
   d,
   strokeWidth,
+  fireLine="fire-line",
 }: {
   d: string;
   strokeWidth?: number;
+  fireLine?: string;
 }) => {
   return (
     <>
@@ -17,7 +19,7 @@ export const Path = ({
         d={d}
       ></path>
       {/* animated lines */}
-      <path strokeWidth={strokeWidth || 0.5} className="fire-line" d={d}></path>
+      <path strokeWidth={strokeWidth || 0.5} className={fireLine} d={d}></path>
     </>
   );
 };

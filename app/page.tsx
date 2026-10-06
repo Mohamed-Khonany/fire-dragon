@@ -7,11 +7,13 @@ import About from "@/components/Sections/about/about";
 export default function Root() {
   return (
     <div className="w-full relative overflow-x-hidden font-body ">
-      <Banner />
-      <About />
-      <Projects />
-      <Work />
-      <Banner />
+      <div >
+        <Banner />
+        <About />
+        <Projects />
+        <Work />
+      </div>
+      {/* <Banner /> */}
     </div>
   );
 }

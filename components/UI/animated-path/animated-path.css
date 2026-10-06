@@ -36,6 +36,10 @@
   animation: dash var(--duration) ease-out infinite;
   stroke-dasharray: 16 56;
 }
+.fire-line-1 {
+  animation: dash var(--duration) ease-out infinite;
+  stroke-dasharray: 120 126;
+}
 
 .fire-line:nth-child(odd) {
   animation-direction: normal;

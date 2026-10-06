@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import {
   WebGLRenderer,
   Scene,
@@ -13,14 +13,14 @@ import {
   ShaderMaterial,
   Vector2,
   Vector3,
-  Vector4
-} from 'three';
+  Vector4,
+} from "three";
 
 gsap.registerPlugin(useGSAP);
 
 const MAX_POINTS = 64;
 
-type BlendMode = 'normal' | 'screen' | 'plus-lighter';
+type BlendMode = "normal" | "screen" | "plus-lighter";
 
 export interface GlowCursorProps {
   color?: string;
@@ -42,7 +42,14 @@ export interface GlowCursorProps {
   maxDevicePixelRatio?: number;
   enabled?: boolean;
   zIndex?: number;
+  dotSize?: number;
+  ringSize?: number;
+  ringBorderWidth?: number;
+  interactiveSelector?: string;
 }
+
+const DEFAULT_INTERACTIVE =
+  'a[href], button:not(:disabled), [role="button"], input[type="button"], input[type="submit"], summary, label[for], select, [data-cursor="hover"]';
 
 // ShaderMaterial injects `attribute position/uv` and precision itself.
 const VERTEX_SHADER = `
@@ -158,26 +165,53 @@ void main() {
 `;
 
 const hexToRgb = (hex: string): [number, number, number] => {
-  let value = (hex || '').replace('#', '').trim();
+  let value = (hex || "").replace("#", "").trim();
   if (value.length === 3)
     value = value
-      .split('')
+      .split("")
       .map((char: string) => char + char)
-      .join('');
-  const parsed = Number.parseInt(value || '000000', 16);
-  return [((parsed >> 16) & 255) / 255, ((parsed >> 8) & 255) / 255, (parsed & 255) / 255];
+      .join("");
+  const parsed = Number.parseInt(value || "000000", 16);
+  return [
+    ((parsed >> 16) & 255) / 255,
+    ((parsed >> 8) & 255) / 255,
+    (parsed & 255) / 255,
+  ];
 };
 
-const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
+const clamp = (v: number, min: number, max: number) =>
+  Math.min(Math.max(v, min), max);
+
+/** "rgb(1, 2, 3)" / "rgba(1, 2, 3, .5)" -> same color with a different alpha. */
+const withAlpha = (css: string, alpha: number) => {
+  if (css.trim().startsWith("#")) {
+    const [r, g, b] = hexToRgb(css);
+    return `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${alpha})`;
+  }
+  const m = css.match(/[\d.]+/g);
+  if (!m || m.length < 3) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${m[0]}, ${m[1]}, ${m[2]}, ${alpha})`;
+};
+
+/** Alpha of a computed css color string (1 when it has no alpha channel). */
+const alphaOf = (css: string) => {
+  const m = css.match(/[\d.]+/g);
+  return m && m.length >= 4 ? parseFloat(m[3]) : 1;
+};
 
 /**
- * Site-wide glow trail. Render it ONCE (in app/layout.js).
+ * Site-wide glow trail + dot cursor. Render it ONCE (in app/layout.js).
  * Fixed, full-screen, click-through canvas that listens on `window`.
  * Rendering: Three.js + the original shader. Animation: GSAP.
+ *
+ * Dot:  replaces the native cursor, filled with the trail's gradient.
+ * Ring: over links / buttons the dot morphs into an unfilled circle whose
+ *       border takes the hovered element's text color
+ *       (override per element with data-cursor-color="#hex").
  */
 export default function GlowCursor({
-  color = '#67E8F9',
-  secondaryColor = '#A78BFA',
+  color = "#67E8F9",
+  secondaryColor = "#A78BFA",
   trailLength = 40,
   trailWidth = 8,
   trailTaper = 0.8,
@@ -191,15 +225,28 @@ export default function GlowCursor({
   noiseStrength = 0.035,
   idleTimeout = 700,
   fadeDuration = 900,
-  blendMode = 'screen',
+  blendMode = "screen",
   maxDevicePixelRatio = 1,
   enabled = true,
-  zIndex = 9999
+  zIndex = 9999,
+  dotSize = 12,
+  ringSize = 70,
+  ringBorderWidth = 3,
+  interactiveSelector = DEFAULT_INTERACTIVE,
 }: GlowCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const stateRef = useRef({ fade: 0, enabled: enabled ? 1 : 0 });
+  const dotRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
+  const haloRef = useRef<HTMLDivElement>(null);
+  // `dot` = 0..1 visibility of the dot (hidden until first move / when leaving the window)
+  const stateRef = useRef({ fade: 0, enabled: enabled ? 1 : 0, dot: 0 });
+  const activeRef = useRef(false); // true once the cursor is actually running (fine pointer, motion ok)
 
-  const cfgRef = useRef({} as Required<Omit<GlowCursorProps, 'zIndex' | 'maxDevicePixelRatio' | 'enabled'>>);
+  const cfgRef = useRef(
+    {} as Required<
+      Omit<GlowCursorProps, "zIndex" | "maxDevicePixelRatio" | "enabled">
+    >,
+  );
   cfgRef.current = {
     color,
     secondaryColor,
@@ -216,16 +263,22 @@ export default function GlowCursor({
     noiseStrength,
     idleTimeout,
     fadeDuration,
-    blendMode
+    blendMode,
+    dotSize,
+    ringSize,
+    ringBorderWidth,
+    interactiveSelector,
   };
 
-  // Smoothly turn the whole effect on/off
+  // Smoothly turn the whole effect on/off (and give the native cursor back when off)
   useEffect(() => {
     const tween = gsap.to(stateRef.current, {
       enabled: enabled ? 1 : 0,
       duration: 0.35,
-      ease: 'power2.out'
+      ease: "power2.out",
     });
+    if (activeRef.current)
+      document.documentElement.classList.toggle("glow-cursor-on", enabled);
     return () => {
       tween.kill();
     };
@@ -234,22 +287,35 @@ export default function GlowCursor({
   useGSAP(
     () => {
       const canvas = canvasRef.current;
-      if (!canvas) return;
+      const dotEl = dotRef.current;
+      const fillEl = fillRef.current;
+      const haloEl = haloRef.current;
+      if (!canvas || !dotEl || !fillEl || !haloEl) return;
 
-      // Touch device or reduced motion -> do nothing (no WebGL context, no loop)
-      if (window.matchMedia('(pointer: coarse)').matches) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      // Touch device or reduced motion -> do nothing (no WebGL context, no loop, native cursor stays)
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
       const state = stateRef.current;
+
+      // ---------- Hide the native cursor (only now that the custom one is live) ----------
+      const styleEl = document.createElement("style");
+      styleEl.textContent =
+        "html.glow-cursor-on, html.glow-cursor-on * { cursor: none !important; }";
+      document.head.appendChild(styleEl);
+      activeRef.current = true;
+      document.documentElement.classList.toggle("glow-cursor-on", enabled);
 
       // ---------- Three.js setup ----------
       const renderer = new WebGLRenderer({
         canvas,
         alpha: true,
         antialias: false,
-        premultipliedAlpha: false
+        premultipliedAlpha: false,
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDevicePixelRatio));
+      renderer.setPixelRatio(
+        Math.min(window.devicePixelRatio || 1, maxDevicePixelRatio),
+      );
       renderer.setClearColor(0x000000, 0);
 
       const scene = new Scene();
@@ -257,12 +323,21 @@ export default function GlowCursor({
 
       const geometry = new BufferGeometry();
       geometry.setAttribute(
-        'position',
-        new BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3)
+        "position",
+        new BufferAttribute(
+          new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]),
+          3,
+        ),
       );
-      geometry.setAttribute('uv', new BufferAttribute(new Float32Array([0, 0, 2, 0, 0, 2]), 2));
+      geometry.setAttribute(
+        "uv",
+        new BufferAttribute(new Float32Array([0, 0, 2, 0, 0, 2]), 2),
+      );
 
-      const pointVectors = Array.from({ length: MAX_POINTS }, () => new Vector2());
+      const pointVectors = Array.from(
+        { length: MAX_POINTS },
+        () => new Vector2(),
+      );
       const init = cfgRef.current;
 
       const material = new ShaderMaterial({
@@ -274,7 +349,9 @@ export default function GlowCursor({
           uPointCount: { value: init.trailLength },
           uBounds: { value: new Vector4(0, 0, 0, 0) },
           uColor: { value: new Vector3(...hexToRgb(init.color)) },
-          uSecondaryColor: { value: new Vector3(...hexToRgb(init.secondaryColor)) },
+          uSecondaryColor: {
+            value: new Vector3(...hexToRgb(init.secondaryColor)),
+          },
           uTrailWidth: { value: init.trailWidth },
           uTaper: { value: init.trailTaper },
           uGlowIntensity: { value: init.glowIntensity },
@@ -284,13 +361,13 @@ export default function GlowCursor({
           uOpacity: { value: init.opacity },
           uPulseSpeed: { value: init.pulseSpeed },
           uNoiseStrength: { value: init.noiseStrength },
-          uNormalBlend: { value: init.blendMode === 'normal' ? 1 : 0 },
+          uNormalBlend: { value: init.blendMode === "normal" ? 1 : 0 },
           uTime: { value: 0 },
-          uFade: { value: 0 }
+          uFade: { value: 0 },
         },
         transparent: true,
         depthTest: false,
-        depthWrite: false
+        depthWrite: false,
       });
 
       const mesh = new Mesh(geometry, material);
@@ -307,18 +384,143 @@ export default function GlowCursor({
       let initialized = false;
       let needsClear = false;
 
+      // ---------- Dot / ring state ----------
+      gsap.set(dotEl, { xPercent: -50, yPercent: -50, x: -100, y: -100 });
+      // Tight follow so the dot feels like the real pointer (the trail provides the lag)
+      const dotX = gsap.quickTo(dotEl, "x", {
+        duration: 0.08,
+        ease: "power3.out",
+      });
+      const dotY = gsap.quickTo(dotEl, "y", {
+        duration: 0.08,
+        ease: "power3.out",
+      });
+      let dotPlaced = false;
+      let hovered: Element | null = null;
+      let lastDotOpacity = -1;
+
+      // Glow strings are written in the order browsers report box-shadow
+      // ("color x y blur spread [inset]") so GSAP can interpolate them cleanly.
+      const glow = (c: string, outer: number, inner: number, blur: number) =>
+        `${withAlpha(c, outer)} 0px 0px ${blur}px 1px, ${withAlpha(c, inner)} 0px 0px ${blur}px 1px inset`;
+
+      const toRing = (target: Element) => {
+        const cfg = cfgRef.current;
+        const ringColor =
+          (target as HTMLElement).dataset?.cursorColor || cfg.color;
+
+        // Start the border invisible in the right color so it fades in instead of flashing
+        if (
+          parseFloat(gsap.getProperty(dotEl, "borderWidth") as string) < 0.5
+        ) {
+          gsap.set(dotEl, { borderColor: withAlpha(ringColor, 0) });
+        }
+        gsap.to(dotEl, {
+          width: cfg.ringSize,
+          height: cfg.ringSize,
+          borderWidth: cfg.ringBorderWidth,
+          borderColor: ringColor,
+          borderRadius: "100%",
+          boxShadow: glow(ringColor, 0.75, 0.45, 14),
+          duration: 0.45,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+        gsap.to(fillEl, {
+          opacity: 0,
+          scale: 0.3,
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        gsap.to(haloEl, { opacity: 0, duration: 0.3, ease: "power2.out" });
+      };
+
+      const toDot = () => {
+        const cfg = cfgRef.current;
+        const current = gsap.getProperty(dotEl, "borderColor") as string;
+        gsap.to(dotEl, {
+          width: cfg.dotSize,
+          height: cfg.dotSize,
+          borderWidth: 0,
+          borderColor: withAlpha(current, 0),
+          boxShadow: glow(current, 0, 0, 0),
+          duration: 0.4,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+        gsap.to(fillEl, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          ease: "power3.out",
+          overwrite: "auto",
+        });
+        gsap.to(haloEl, { opacity: 1, duration: 0.4, ease: "power2.out" });
+      };
+
+      const onPointerOver = (e: PointerEvent) => {
+        const target =
+          (e.target as Element | null)?.closest?.(
+            cfgRef.current.interactiveSelector,
+          ) ?? null;
+        if (target === hovered) return;
+        const wasHovering = hovered !== null;
+        hovered = target;
+        if (target) toRing(target);
+        else if (wasHovering) toDot();
+      };
+
+      const onPointerDown = () => {
+        gsap.to(dotEl, { scale: 0.82, duration: 0.15, ease: "power2.out" });
+      };
+      const onPointerUp = () => {
+        gsap.to(dotEl, {
+          scale: 1,
+          duration: 0.45,
+          ease: "elastic.out(1, 0.5)",
+        });
+      };
+
+      // Halo breathes like the trail's pulse
+      const pulseSpeed = Math.abs(cfgRef.current.pulseSpeed);
+      const haloPulse =
+        pulseSpeed > 0.01
+          ? gsap.fromTo(
+              haloEl,
+              { scale: 0.85 },
+              {
+                scale: 1.2,
+                duration: 0.9 / clamp(pulseSpeed, 0.3, 2),
+                yoyo: true,
+                repeat: -1,
+                ease: "sine.inOut",
+              },
+            )
+          : null;
+
       // ---------- GSAP: head follows pointer ----------
-      const headDuration = clamp(0.04 / clamp(init.followSpeed, 0.01, 0.99), 0.04, 2);
-      const headX = gsap.quickTo(head, 'x', { duration: headDuration, ease: 'power3.out' });
-      const headY = gsap.quickTo(head, 'y', { duration: headDuration, ease: 'power3.out' });
+      const headDuration = clamp(
+        0.04 / clamp(init.followSpeed, 0.01, 0.99),
+        0.04,
+        2,
+      );
+      const headX = gsap.quickTo(head, "x", {
+        duration: headDuration,
+        ease: "power3.out",
+      });
+      const headY = gsap.quickTo(head, "y", {
+        duration: headDuration,
+        ease: "power3.out",
+      });
 
       // ---------- GSAP: idle fade ----------
       const fadeOut = () => {
         gsap.to(state, {
           fade: 0,
           duration: cfgRef.current.fadeDuration / 1000,
-          ease: 'power2.out',
-          overwrite: 'auto'
+          ease: "power2.out",
+          overwrite: "auto",
         });
       };
       const idleCall = gsap.delayedCall(init.idleTimeout / 1000, fadeOut);
@@ -351,7 +553,27 @@ export default function GlowCursor({
         headX(x);
         headY(y);
 
-        gsap.to(state, { fade: 1, duration: 0.2, ease: 'power2.out', overwrite: 'auto' });
+        // Dot uses plain client coords. First move: jump there, don't fly in from the corner.
+        if (!dotPlaced) {
+          gsap.set(dotEl, { x: e.clientX, y: e.clientY });
+          dotPlaced = true;
+        }
+        dotX(e.clientX);
+        dotY(e.clientY);
+        if (state.dot < 1)
+          gsap.to(state, {
+            dot: 1,
+            duration: 0.2,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+
+        gsap.to(state, {
+          fade: 1,
+          duration: 0.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
         idleCall.duration(cfgRef.current.idleTimeout / 1000);
         idleCall.restart(true);
       };
@@ -359,10 +581,27 @@ export default function GlowCursor({
       const onLeaveWindow = () => {
         idleCall.pause();
         fadeOut();
+        gsap.to(state, {
+          dot: 0,
+          duration: 0.2,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        if (hovered) {
+          hovered = null;
+          toDot();
+        }
       };
 
       // ---------- GSAP ticker: move the chain + render ----------
       const render = (time: number) => {
+        // Dot visibility (cheap: only touches the DOM when the value changes)
+        const dotOpacity = state.dot * state.enabled;
+        if (Math.abs(dotOpacity - lastDotOpacity) > 0.001) {
+          dotEl.style.opacity = String(dotOpacity);
+          lastDotOpacity = dotOpacity;
+        }
+
         const visible = initialized && state.fade * state.enabled > 0.003;
 
         // SLEEP: nothing visible -> clear once, then do no work
@@ -405,8 +644,16 @@ export default function GlowCursor({
           }
         }
         // Glow falls off like 1/(1+(d/falloff)^2); 12x falloff is below visibility
-        const margin = Math.max(cfg.trailWidth, 0.1) * (0.8 + Math.max(cfg.glowSpread, 0) * 1.4) * 12;
-        u.uBounds.value.set(minX - margin, minY - margin, maxX + margin, maxY + margin);
+        const margin =
+          Math.max(cfg.trailWidth, 0.1) *
+          (0.8 + Math.max(cfg.glowSpread, 0) * 1.4) *
+          12;
+        u.uBounds.value.set(
+          minX - margin,
+          minY - margin,
+          maxX + margin,
+          maxY + margin,
+        );
 
         u.uPointCount.value = count;
         u.uColor.value.set(...hexToRgb(cfg.color));
@@ -420,7 +667,7 @@ export default function GlowCursor({
         u.uOpacity.value = clamp(cfg.opacity, 0, 1);
         u.uPulseSpeed.value = cfg.pulseSpeed;
         u.uNoiseStrength.value = clamp(cfg.noiseStrength, 0, 1);
-        u.uNormalBlend.value = cfg.blendMode === 'normal' ? 1 : 0;
+        u.uNormalBlend.value = cfg.blendMode === "normal" ? 1 : 0;
         u.uTime.value = time; // GSAP ticker time is already in seconds
         u.uFade.value = state.fade * state.enabled;
 
@@ -428,32 +675,86 @@ export default function GlowCursor({
       };
 
       resize();
-      window.addEventListener('resize', resize);
-      window.addEventListener('pointermove', onPointerMove, { passive: true });
-      document.documentElement.addEventListener('pointerleave', onLeaveWindow);
+      window.addEventListener("resize", resize);
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("pointerdown", onPointerDown, { passive: true });
+      window.addEventListener("pointerup", onPointerUp, { passive: true });
+      document.addEventListener("pointerover", onPointerOver, {
+        passive: true,
+      });
+      document.documentElement.addEventListener("pointerleave", onLeaveWindow);
       gsap.ticker.add(render);
 
       return () => {
         gsap.ticker.remove(render);
         idleCall.kill();
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('pointermove', onPointerMove);
-        document.documentElement.removeEventListener('pointerleave', onLeaveWindow);
+        haloPulse?.kill();
+        gsap.killTweensOf([dotEl, fillEl, haloEl]);
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerdown", onPointerDown);
+        window.removeEventListener("pointerup", onPointerUp);
+        document.removeEventListener("pointerover", onPointerOver);
+        document.documentElement.removeEventListener(
+          "pointerleave",
+          onLeaveWindow,
+        );
+        document.documentElement.classList.remove("glow-cursor-on");
+        styleEl.remove();
+        activeRef.current = false;
         geometry.dispose();
         material.dispose();
         renderer.dispose();
         renderer.forceContextLoss();
       };
     },
-    { dependencies: [maxDevicePixelRatio, followSpeed], revertOnUpdate: true }
+    { dependencies: [maxDevicePixelRatio, followSpeed], revertOnUpdate: true },
   );
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 h-screen w-screen select-none"
-      style={{ zIndex, mixBlendMode: blendMode }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 h-screen w-screen select-none"
+        style={{ zIndex, mixBlendMode: blendMode }}
+      />
+      {/* Dot -> ring. The outer element is the ring (border + size); the fill is the gradient dot. */}
+      <div
+        ref={dotRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 select-none rounded-full"
+        style={{
+          zIndex: zIndex + 1,
+          width: dotSize,
+          height: dotSize,
+          boxSizing: "border-box",
+          borderStyle: "solid",
+          borderWidth: 0,
+          borderColor: withAlpha(color, 0),
+          boxShadow: `${withAlpha(color, 0)} 0px 0px 0px 1px, ${withAlpha(color, 0)} 0px 0px 0px 1px inset`,
+          opacity: 0,
+          willChange: "transform, width, height",
+        }}
+      >
+        {/* soft halo, same hues as the trail glow */}
+        <div
+          ref={haloRef}
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            inset: "-100%",
+            background: `radial-gradient(circle, ${withAlpha(color, 0.55)} 0%, ${withAlpha(secondaryColor, 0.28)} 40%, transparent 70%)`,
+          }}
+        />
+        {/* hot white core fading into the trail gradient */}
+        <div
+          ref={fillRef}
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,${Math.min(1, hotspot + 0.25)}) 0%, ${color} 45%, ${secondaryColor} 100%)`,
+          }}
+        />
+      </div>
+    </>
   );
 }

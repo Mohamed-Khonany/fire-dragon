@@ -21,15 +21,15 @@ export const aboutData = {
     city: "Cairo",
     country: "Egypt",
   },
-  contact: {
+  socials: {
     github: "https://github.com/Mohamed-Khonany",
-    linkedin: "https://www.linkedin.com/in/mohamed-khonany/",
+    linkedin: "https://www.linkedin.com/in/mohamed-khonany-5a6659244/",
     email: "mkhonany777@gmail.com",
-    number: "+20 11 554 04 878",
+    whatsapp: "+20 11 554 04 878",
   },
   profilePhoto: ProfilePhoto,
   yearsOfExperience: "+02",
-  cv: "../public/assets/files/Mohamed-Samir-Khonany.pdf",
+  cv: "/Mohamed-Samir-Khonany.pdf",
   skills: {
     technical: CATEGORIES,
     soft: [
