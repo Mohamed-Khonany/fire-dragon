@@ -361,20 +361,20 @@ export default function TechnicalForge() {
           ref={titleRef}
           className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180"
         >
-          <h1 className="text-center text-3xl  font-semibold uppercase tracking-[0.35em] text-zinc-300">
+          <h1 className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">
             Technical <GradientText inline={true}>Skills</GradientText>
           </h1>
           <span className="h-0.5 w-28 rounded-full bg-linear-to-r from-primary-container to-secondary lg:h-28 lg:w-0.5 lg:bg-linear-to-b" />
         </div>
 
         <div className="flex w-full flex-col items-center gap-6 xl:gap-8">
-          <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:items-stretch lg:gap-4 xl:gap-8">
+          <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:items-stretch gap-10">
             {row1.map((category) => (
               <SkillCard key={category.title} {...category} />
             ))}
           </div>
 
-          <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:w-2/3 lg:gap-4 xl:gap-8">
+          <div className="grid w-full mx-auto grid-cols-1 gap-8 sm:grid-cols-2 lg:w-2/3">
             {row2.map((category) => (
               <SkillCard key={category.title} {...category} />
             ))}

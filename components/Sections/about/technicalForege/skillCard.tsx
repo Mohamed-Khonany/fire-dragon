@@ -15,8 +15,8 @@ export function SkillCard({ title, icon: HeaderIcon, skills }: Category) {
     <div className="forge-card-wrap h-full ">
       <div
         className="
-          skill-card relative h-full rounded-2xl border border-white/10
-          bg-linear-to-b from-white/4 to-white/1 p-5 sm:p-6
+          skill-card relative rounded-2xl border border-white/10
+          bg-linear-to-b from-white/4 to-white/1 p-6 mx-5
           will-change-transform
         "
       >

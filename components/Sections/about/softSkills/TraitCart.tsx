@@ -112,14 +112,13 @@ export function TraitCard({
   return (
     <div
       ref={cardRef}
-      className={` relative flex flex-col items-center justify-center gap-5 rounded-2xl border border-white/[0.07] bg-[#1a1a1a] px-6 py-22 cursor-default select-none overflow-hidden
+      className={` relative flex flex-col items-center justify-center gap-5 rounded-2xl border border-white/[0.07] bg-[#1a1a1a] px-6 py-16 md:py-22 cursor-default select-none overflow-hidden
         transition-[translate,border-color,background-color,box-shadow] 
         hover:-translate-y-1
         hover:border-orange-500/40
         hover:bg-[#1e1c1a]
-        ${index < 4 ? "md:ml-0" : "md:ml-12"}
         hover:shadow-[0_0_0_1px_rgba(249,115,22,0.2),0_8px_32px_rgba(249,115,22,0.12)]`}
-    >
+        >
       {/* Subtle radial glow behind icon on hover */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"

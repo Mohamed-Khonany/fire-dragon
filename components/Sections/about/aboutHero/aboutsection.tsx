@@ -435,7 +435,7 @@ export default function AboutSection({ data }: { data: any }) {
               </div>
 
               {/* Social links */}
-              <div className="a-socials flex items-center gap-4 px-4">
+              <div className="a-socials flex items-center gap-4 lg:px-8">
                 {socials.map(({ key, label, href, Icon }) => (
                   <Link
                     key={key}
