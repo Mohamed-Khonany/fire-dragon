@@ -43,14 +43,14 @@ import VSCodeIcon from "../../../../public/assets/images/languageSkills/vscode.s
 import Image from "next/image";
 
 /** Types */
-interface Skill {
+export interface Skill {
   name: string;
   icon: IconType;
   color: string; // brand color, kept per-icon so the badge still reads at a glance
   percentage?: number; // optional proficiency percentage
 }
 
-interface Category {
+export interface Category {
   title: string;
   icon: LucideIcon;
   skills: Skill[];

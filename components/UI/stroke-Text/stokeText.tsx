@@ -283,7 +283,7 @@ const StrokeText = ({
           end: start, // intro ends exactly where the pin begins
           scrub,
           invalidateOnRefresh: true, // recompute the centre distance on resize
-          markers: true,
+          // markers: true,
         },
       });
 
