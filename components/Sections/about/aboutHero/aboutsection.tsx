@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import "../../../../styles/typography.css";
 import gsap from "gsap";
@@ -24,19 +24,39 @@ const toWhatsapp = (v?: string) => {
   return `https://wa.me/${v.replace(/[^\d]/g, "")}`;
 };
 
-export default function AboutSection({ data }: { data: any }) {
+export interface AboutDataProps {
+  name?: string;
+  description?: string;
+  title?: string;
+  location?: { city?: string; country?: string };
+  socials?: {
+    github?: string;
+    gitHub?: string;
+    linkedin?: string;
+    linkedIn?: string;
+    email?: string;
+    gmail?: string;
+    whatsapp?: string;
+    whatsApp?: string;
+  };
+  profilePhoto: StaticImageData | string;
+  yearsOfExperience?: string | number;
+  cv: string;
+}
+
+export default function AboutSection({ data }: { data: AboutDataProps }) {
   const root = useRef<HTMLDivElement>(null);
   const tiltRef = useRef<HTMLDivElement>(null);
   const glareRef = useRef<HTMLDivElement>(null);
   const [downloaded, setDownloaded] = useState(false);
 
-  const s = data.socials ?? data;
+  const s = data.socials ?? {};
   const socials = [
     { key: "linkedin", label: "LinkedIn", href: s.linkedIn ?? s.linkedin, Icon: FaLinkedinIn },
     { key: "github", label: "GitHub", href: s.github ?? s.gitHub, Icon: FaGithub },
     { key: "gmail", label: "Gmail", href: toMail(s.gmail ?? s.email), Icon: MdMailOutline },
     { key: "whatsapp", label: "WhatsApp", href: toWhatsapp(s.whatsapp ?? s.whatsApp), Icon: FaWhatsapp },
-  ].filter((i) => i.href);
+  ].filter((i): i is typeof i & { href: string } => Boolean(i.href));
 
   useGSAP(
     () => {

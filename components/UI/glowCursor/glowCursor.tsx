@@ -193,12 +193,6 @@ const withAlpha = (css: string, alpha: number) => {
   return `rgba(${m[0]}, ${m[1]}, ${m[2]}, ${alpha})`;
 };
 
-/** Alpha of a computed css color string (1 when it has no alpha channel). */
-const alphaOf = (css: string) => {
-  const m = css.match(/[\d.]+/g);
-  return m && m.length >= 4 ? parseFloat(m[3]) : 1;
-};
-
 /**
  * Site-wide glow trail + dot cursor. Render it ONCE (in app/layout.js).
  * Fixed, full-screen, click-through canvas that listens on `window`.
@@ -242,12 +236,11 @@ export default function GlowCursor({
   const stateRef = useRef({ fade: 0, enabled: enabled ? 1 : 0, dot: 0 });
   const activeRef = useRef(false); // true once the cursor is actually running (fine pointer, motion ok)
 
-  const cfgRef = useRef(
-    {} as Required<
+  const cfgRef = useRef<
+    Required<
       Omit<GlowCursorProps, "zIndex" | "maxDevicePixelRatio" | "enabled">
-    >,
-  );
-  cfgRef.current = {
+    >
+  >({
     color,
     secondaryColor,
     trailLength,
@@ -268,7 +261,53 @@ export default function GlowCursor({
     ringSize,
     ringBorderWidth,
     interactiveSelector,
-  };
+  });
+
+  useEffect(() => {
+    cfgRef.current = {
+      color,
+      secondaryColor,
+      trailLength,
+      trailWidth,
+      trailTaper,
+      followSpeed,
+      glowIntensity,
+      glowSpread,
+      hotspot,
+      brightness,
+      opacity,
+      pulseSpeed,
+      noiseStrength,
+      idleTimeout,
+      fadeDuration,
+      blendMode,
+      dotSize,
+      ringSize,
+      ringBorderWidth,
+      interactiveSelector,
+    };
+  }, [
+    color,
+    secondaryColor,
+    trailLength,
+    trailWidth,
+    trailTaper,
+    followSpeed,
+    glowIntensity,
+    glowSpread,
+    hotspot,
+    brightness,
+    opacity,
+    pulseSpeed,
+    noiseStrength,
+    idleTimeout,
+    fadeDuration,
+    blendMode,
+    dotSize,
+    ringSize,
+    ringBorderWidth,
+    interactiveSelector,
+  ]);
 
   // Smoothly turn the whole effect on/off (and give the native cursor back when off)
   useEffect(() => {

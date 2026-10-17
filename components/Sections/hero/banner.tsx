@@ -1,6 +1,4 @@
-import Link from "next/link";
 import AnimatedBanner from "@/components/UI/animated-path/animated-banner";
-import { FireSpan, FireDev } from "@/components/UI/fireSpan/fire";
 import GradientText from "@/components/UI/fireSpan/gradientText";
 import { heroData } from "@/data/hero-data";
 

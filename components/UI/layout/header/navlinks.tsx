@@ -1,5 +1,5 @@
 "use client";
-import { Line, Path } from "@/components/UI/animated-path/animated-path";
+import { Path } from "@/components/UI/animated-path/animated-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../../animated-path/animated-path.css";
@@ -18,9 +18,9 @@ export const NavLinks = () => {
   return (
     <nav className="hidden xl:flex items-center justify-center gap-5 py-7">
       {navLinks.map((link) => {
-        const isActive =
-          pathname === link.href ||
-          (pathname.startsWith(link.href) && link.href !== "/");
+        const isActive = link.href === "/about"
+          // pathname === link.href ||
+          // (pathname.startsWith(link.href) && link.href !== "/");
         return (
           <div
             className="fire-wrapper h-5 w-30 relative flex items-center justify-center"

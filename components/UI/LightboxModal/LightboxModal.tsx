@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
-const LightboxModal = ({ src, onClose }:{ src: string; onClose: () => void }) => {
-  const modalRef = useRef(null); // Reference for the modal container
+const LightboxModal = ({ src, onClose }: { src: string; onClose: () => void }) => {
+  const modalRef = useRef<HTMLDivElement>(null); // Reference for the modal container
 
   // Close the modal if clicked outside
   useEffect(() => {
-    const handleClickOutside = ({event}:{ event: MouseEvent }) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose(); // Close the modal when clicked outside
       }
     };
@@ -21,15 +22,18 @@ const LightboxModal = ({ src, onClose }:{ src: string; onClose: () => void }) =>
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/75">
       <div
         ref={modalRef} // Attach the ref to the modal container
-        className="object-contain"
+        className="relative object-contain"
       >
-        <img
+        <Image
           className="lg:max-w-screen-lg lg:max-h-screen md:max-w-screen-lg md:max-h-screen object-contain mx-auto rounded-lg"
           src={src}
-          alt=""
+          alt="Modal preview"
+          width={1000}
+          height={700}
+          unoptimized
         />
         <button
           type="button"

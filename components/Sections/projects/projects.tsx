@@ -1,7 +1,4 @@
 "use client";
-// import ProjectsSection from "../projects/projectSection";
-import GradientText from "@/components/UI/fireSpan/gradientText";
-
 import { useRef } from "react";
 import StrokeText from "@/components/UI/stroke-Text/stokeText";
 

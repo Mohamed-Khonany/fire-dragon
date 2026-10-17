@@ -98,7 +98,11 @@ export function SkillBadge({ name, icon: Icon, color, percentage }: Skill) {
         // touch devices have no hover: tap toggles
         if (e.pointerType !== "touch") return;
         openRef.current = !openRef.current;
-        openRef.current ? open() : close();
+        if (openRef.current) {
+          open();
+        } else {
+          close();
+        }
       }}
       onFocus={(e) => e.currentTarget.matches(":focus-visible") && open()}
       onBlur={() => {

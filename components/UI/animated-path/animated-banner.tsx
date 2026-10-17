@@ -4,6 +4,8 @@ import Image from "next/image";
 import Logo from "../../../public/assets/images/logo/logo-banner.png";
 
 export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
+
+  const logoBanner = Logo;
   return (
     <>
       <div className="fire-wrapper relative flex items-center justify-center w-full h-full">
@@ -38,7 +40,7 @@ export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
         {isHome && (
           <div>
             <Image
-              src={Logo}
+              src={logoBanner}
               height={300}
               width={300}
               alt="fire-dragon-logo"

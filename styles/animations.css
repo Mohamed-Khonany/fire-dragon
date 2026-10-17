@@ -20,6 +20,16 @@
   }
 }
 
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(350%);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @keyframes forgeFadeUp {
     from {

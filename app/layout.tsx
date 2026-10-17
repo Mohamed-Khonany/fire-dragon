@@ -37,7 +37,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${montserrat.variable} ${mono.variable} `}
     >
-      <body className="flex flex-col justify-center items-center">
+      <body className="flex flex-col justify-center items-center bg-black text-white">
         <div className="pointer-events-none fixed inset-0 z-9999 pointer-coarse:hidden">
           <GlowCursor
             color="#ff5a00"

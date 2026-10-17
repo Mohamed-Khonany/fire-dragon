@@ -1,5 +1,4 @@
 "use client";
-import { FireSpan } from "@/components/UI/fireSpan/fire";
 import { TraitCard, TRAITS } from "./TraitCart";
 import GradientText from "@/components/UI/fireSpan/gradientText";
 import { useRef } from "react";
