@@ -68,7 +68,7 @@ export default function About() {
               pin: true,
               start: "top top",
               end: () => `+=${getScrollDistance()}`,
-              scrub: reduceMotion ? true : 1,
+              scrub: true,
               anticipatePin: 1,
               invalidateOnRefresh: true,
             },

@@ -20,6 +20,7 @@ import {
   SiGithub,
   SiGit,
   SiPostman,
+  SiGsap
   //   SiGo,
   //   SiPostgresql,
   //   SiFlutter,
@@ -82,8 +83,9 @@ export const CATEGORIES: Category[] = [
       { name: "React", icon: SiReact, color: "#61DAFB", percentage: 90 },
       { name: "Next.js", icon: SiNextdotjs, color: "#FFFFFF", percentage: 85 },
       { name: "Tailwind CSS", icon: SiTailwindcss, color: "#38BDF8", percentage: 80 },
-      { name: "Framer Motion", icon: SiFramer, color: "#A259FF", percentage: 75 },
-      { name: "Redux Toolkit", icon: SiRedux, color: "#764ABC", percentage: 70 },
+      { name: "GSAP", icon: SiGsap, color: "#FFFFFF", percentage: 75 },
+      { name: "Framer Motion", icon: SiFramer, color: "#A259FF", percentage: 60 },
+      { name: "Redux Toolkit", icon: SiRedux, color: "#764ABC", percentage: 75 },
     ],
   },
   {
@@ -95,7 +97,7 @@ export const CATEGORIES: Category[] = [
       {
         name: "Nativewind",
         icon: () => (
-          <Image src={NativewindIcon} alt="Nativewind" className="h-11 w-11" />
+          <Image src={NativewindIcon} alt="Nativewind" className="h-8 w-8" />
         ),
         color: "#61DAFB",
         percentage: 80,
@@ -103,7 +105,7 @@ export const CATEGORIES: Category[] = [
       {
         name: "NativeBase",
         icon: () => (
-          <Image src={NativeBaseIcon} alt="NativeBase" className="h-11 w-11" />
+          <Image src={NativeBaseIcon} alt="NativeBase" className="h-9 w-9" />
         ),
         color: "#61DAFB",
         percentage: 80,
