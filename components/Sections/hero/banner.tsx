@@ -1,25 +1,20 @@
-import Link from "next/link";
+
 import AnimatedBanner from "@/components/UI/animated-path/animated-banner";
-import { FireSpan, FireDev } from "@/components/UI/fireSpan/fire";
-import GradientText from "@/components/UI/fireSpan/gradientText";
+
+
 import { heroData } from "@/data/hero-data";
 
 export default function Banner() {
   return (
     <section
-      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black
-          px-6 sm:px-10 md:px-16 lg:px-20 pt-52"
+      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background
+           "
     >
-      <AnimatedBanner isHome={true} />
-      <div className="flex flex-col items-center pb-20 justify-center gap-4 text-center z-10">
-        <span className="text-6xl font-extrabold text-on-surface tracking-widest cursor-default">
-          <GradientText inline={true}>{heroData.firstName}</GradientText>{" "}
-          {heroData.lastName}
-        </span>
-        <p className="max-w-md sm:text-xl leading-8 text-zinc-400 cursor-default">
+      <AnimatedBanner isHome={true} heroData={heroData} />
+
+      {/* <p className="md:absolute md:bottom-0 md:left-3 max-w-md sm:text-xl md:text-sm leading-8 text-zinc-400 cursor-default">
           {heroData.description}
-        </p>
-      </div>
+        </p> */}
 
       {/* 
       <div className="flex flex-col gap-6 text-base font-medium sm:flex-row sm:gap-10 z-10">

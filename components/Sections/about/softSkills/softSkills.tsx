@@ -2,21 +2,19 @@
 import { FireSpan } from "@/components/UI/fireSpan/fire";
 import { TraitCard, TRAITS } from "./TraitCart";
 import GradientText from "@/components/UI/fireSpan/gradientText";
-import { useRef } from "react";
+
 
 // ─────────────────────────────────────────────
 // ForgeCharacter (default export)
 // ─────────────────────────────────────────────
 export default function SoftSkills() {
 
-  const titleRef = useRef<HTMLDivElement>(null);
   return (
     <div className="relative w-full px-6 py-20 md:px-14">
-      <div className="relative flex flex-col items-center justify-between gap-20 lg:flex-row lg:gap-32">
+      <div className="relative flex flex-col items-center justify-between gap-20 lg:flex-row lg:gap-60">
 
         {/* Section heading */}
-        <div
-          ref={titleRef}
+        <div  
           className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180"
         >
           <h1 className="text-center text-3xl font-semibold uppercase tracking-[0.35em] text-zinc-300">

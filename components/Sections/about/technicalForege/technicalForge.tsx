@@ -5,14 +5,13 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
 import { CATEGORIES } from "./categories";
 import { SkillCard } from "./skillCard";
 import { useAboutScroll } from "../aboutScroll";
 import GradientText from "@/components/UI/fireSpan/gradientText";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, ScrambleTextPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function TechnicalForge() {
   const [row1, row2] = [CATEGORIES.slice(0, 3), CATEGORIES.slice(3)];
@@ -55,94 +54,6 @@ export default function TechnicalForge() {
             /*    letters (first -> last on scroll down, last -> first on   */
             /*    scroll up). Each letter scrambles when the head hits it.  */
             /* ============================================================ */
-            const chars = gsap.utils.toArray<HTMLElement>(".forge-char", title);
-            const n = chars.length;
-            const px = horizontal ? "x" : "y"; // axis across the text
-            const SIGMA = 2.2; // snake body length (in letters)
-            const SPAN = 5; // head starts/ends this far outside the word
-            const AMP = horizontal ? 18 : 12;
-            const state = { head: -SPAN };
-
-            const setX = chars.map((c) => gsap.quickSetter(c, px, "px"));
-            const setS = chars.map((c) => gsap.quickSetter(c, "scale"));
-            const armed = chars.map(() => true);
-
-            const scramble = (el: HTMLElement) => {
-              // freeze the box so random glyph widths can't shove neighbours around
-              el.style.width = `${el.offsetWidth}px`;
-              el.style.height = `${el.offsetHeight}px`;
-              gsap.to(el, {
-                duration: 0.6,
-                overwrite: "auto",
-                scrambleText: {
-                  text: el.dataset.char ?? "",
-                  chars: "upperCase",
-                  speed: 0.7,
-                  revealDelay: 0.05,
-                },
-                onComplete: () => {
-                  el.style.width = "";
-                  el.style.height = "";
-                },
-              });
-            };
-
-            const render = () => {
-              chars.forEach((c, i) => {
-                const d = state.head - i; // > 0: letter is behind the head
-                const env = Math.exp(-(d * d) / (2 * SIGMA * SIGMA)); // snake body
-                const wave = Math.sin(d * 1.1) * env; // sine travelling along the body
-
-                setX[i](wave * AMP);
-                setS[i](1 + env * 0.18);
-                c.style.textShadow =
-                  env > 0.03
-                    ? `0 0 ${(env * 16).toFixed(1)}px rgba(249,115,22,${(env * 0.9).toFixed(2)})`
-                    : "none";
-
-                if (env > 0.7 && armed[i]) {
-                  armed[i] = false;
-                  scramble(c);
-                } else if (env < 0.25) {
-                  armed[i] = true;
-                }
-              });
-            };
-
-            const follow = (self: ScrollTrigger) => {
-              gsap.to(state, {
-                head: gsap.utils.mapRange(
-                  0,
-                  1,
-                  -SPAN,
-                  n - 1 + SPAN,
-                  self.progress,
-                ),
-                duration: 0.5,
-                ease: "power3.out",
-                overwrite: true,
-                onUpdate: render,
-              });
-            };
-
-            ScrollTrigger.create({
-              trigger: title,
-              start: at("left 88%", "top 85%"),
-              end: at("left 32%", "top 35%"),
-              ...link,
-              onUpdate: follow,
-              onRefresh: follow,
-            });
-            render();
-
-            cleanups.push(() => {
-              chars.forEach((c) => {
-                c.textContent = c.dataset.char ?? c.textContent;
-                c.style.width = "";
-                c.style.height = "";
-                c.style.textShadow = "";
-              });
-            });
 
             /* ============================================================ */
             /* 2) CONTENT comes second: desktop cards enter only once the   */
@@ -347,18 +258,10 @@ export default function TechnicalForge() {
       className="flex flex-col items-center justify-center px-4 lg:px-8 lg:pt-16"
     >
       {/* soft vignette so the cards sit in a pool of light rather than flat black */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 50% 35%, rgba(120,60,20,0.08), transparent 70%)",
-        }}
-      />
 
       {/* big gap on desktop: the title is read first, the content second */}
       <div className="relative flex flex-col items-center justify-center gap-10 lg:flex-row lg:gap-60">
         <div
-          ref={titleRef}
           className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180"
         >
           <h1 className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">

@@ -2,8 +2,15 @@ import "./animated-path.css";
 import { Line, Path } from "./animated-path";
 import Image from "next/image";
 import Logo from "../../../public/assets/images/logo/logo-banner.png";
+import GradientText from "../fireSpan/gradientText";
 
-export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
+export default function AnimatedBanner({
+  isHome = true,
+  heroData,
+}: {
+  isHome: boolean;
+  heroData?: any;
+}) {
   return (
     <>
       <div className="fire-wrapper relative flex items-center justify-center w-full h-full">
@@ -22,30 +29,32 @@ export default function AnimatedBanner({ isHome = true }: { isHome: boolean }) {
 
         {/* Glow light bottom-right */}
         <div
-          className="fire-light-2 pointer-events-none absolute rounded-full"
+          className="fire-light-2 pointer-events-none absolute rounded-full z-10"
           style={{
             bottom: "-20px",
-            right: "-20px",
-            width: "80px",
-            height: "40px",
+            right: "-30px",
+            width: "100px",
+            height: "70px",
             backgroundColor: "var(--light-2)",
             filter: "blur(24px)",
-            zIndex: -1,
           }}
         />
 
         {/* Logo Button */}
         {isHome && (
-          <div>
+          <div className="flex flex-col items-center justify-center z-10">
             <Image
               src={Logo}
               height={300}
               width={300}
               alt="fire-dragon-logo"
-              className="z-1 object-contain drop-shadow-lg transition-transform duration-500 ease-in-out transform "
+              className="object-contain drop-shadow-lg transition-transform duration-500 ease-in-out transform "
               priority
             />
-            
+            <span className="text-[46px] font-extrabold text-on-surface tracking-widest cursor-default">
+              <GradientText inline={true}>{heroData.firstName}</GradientText>{" "}
+              {heroData.lastName}
+            </span>
           </div>
         )}
 

@@ -6,12 +6,13 @@ import Link from "next/link";
 import "../../../../styles/typography.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { FaLinkedinIn, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { MdMailOutline, MdOutlineFileDownload, MdCheck } from "react-icons/md";
 import GradientText from "@/components/UI/fireSpan/gradientText";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger, useGSAP, SplitText);
 
 
 /* ---------- helpers ---------- */
@@ -44,17 +45,20 @@ export default function AboutSection({ data }: { data: any }) {
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const q = gsap.utils.selector(root);
-
         /* ======== initial hidden states ======== */
         gsap.set(
-          q(".a-card, .a-badge, .a-name-char, .a-title, .a-desc, .a-cv, .a-social"),
+          q(".a-card, .a-badge, .a-name-char, .a-title, .a-cv, .a-social"),
           { autoAlpha: 0 }
         );
+        const descSplit = SplitText.create(q(".a-desc"), {
+          type: "lines,words,chars",
+          autoSplit:true
+        });
 
         /* ======== Entrance timeline (transform + opacity only) ======== */
         const tl = gsap.timeline({
           defaults: { ease: "power4.out" },
-          scrollTrigger: { trigger: root.current, start: "top 65%", once: true },
+          scrollTrigger: { trigger: root.current, start: "top 65%",end: "top 85%", toggleActions: "play none none reverse" },
         });
 
         tl.fromTo(q(".a-glow"), { scale: 0.4, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.6 }, 0)
@@ -83,7 +87,7 @@ export default function AboutSection({ data }: { data: any }) {
             0.35
           )
           .fromTo(q(".a-title"), { autoAlpha: 0, x: 40 }, { autoAlpha: 1, x: 0, duration: 1.1 }, 0.7)
-          .fromTo(q(".a-desc"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1 }, 0.9)
+          .fromTo(descSplit.lines, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1,stagger: .05,ease: "power2.inOut" }, 0.9)
           .fromTo(
             q(".a-cv"),
             { autoAlpha: 0, y: 30, scale: 0.8 },

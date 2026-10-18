@@ -15,7 +15,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger, ScrollSmoother);
 export default function Root() {
   
   useGSAP(() => {
-    const smoother = ScrollSmoother.create({ smooth: 4, effects: true, normalizeScroll: true });
+    const smoother = ScrollSmoother.create({ smooth: 2, effects: true, normalizeScroll: true });
   });
 
   return (

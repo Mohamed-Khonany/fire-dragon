@@ -30,13 +30,13 @@ export const Header = () => {
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop pt-2  max-w-container-max mx-auto">
         <div
           className={`
-    transition-all duration-500
-    ${
-      isHomePage
-        ? "opacity-100 translate-x-0 scale-100"
-        : "opacity-0 -translate-x-6 scale-75"
-    }
-  `}
+                      transition-all duration-500
+                      ${
+                        isHomePage
+                        ? "opacity-100 translate-x-0 scale-100"
+                        : "opacity-0 -translate-x-6 scale-75"
+                      }
+          `}
         >
           <NavLogo />
         </div>
