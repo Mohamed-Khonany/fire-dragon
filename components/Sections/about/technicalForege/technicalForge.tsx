@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+
 import { CATEGORIES } from "./categories";
 import { SkillCard } from "./skillCard";
 import { useAboutScroll } from "../aboutScroll";
@@ -54,6 +55,7 @@ export default function TechnicalForge() {
             /*    letters (first -> last on scroll down, last -> first on   */
             /*    scroll up). Each letter scrambles when the head hits it.  */
             /* ============================================================ */
+
 
             /* ============================================================ */
             /* 2) CONTENT comes second: desktop cards enter only once the   */
@@ -258,13 +260,20 @@ export default function TechnicalForge() {
       className="flex flex-col items-center justify-center px-4 lg:px-8 lg:pt-16"
     >
       {/* soft vignette so the cards sit in a pool of light rather than flat black */}
+      {/* <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(60% 50% at 50% 35%, rgba(120,60,20,0.08), transparent 70%)",
+        }}
+      /> */}
 
       {/* big gap on desktop: the title is read first, the content second */}
       <div className="relative flex flex-col items-center justify-center gap-10 lg:flex-row lg:gap-60">
         <div
           className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180"
         >
-          <h1 className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">
+          <h1 ref={titleRef} className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">
             Technical <GradientText inline={true}>Skills</GradientText>
           </h1>
           <span className="h-0.5 w-28 rounded-full bg-linear-to-r from-primary-container to-secondary lg:h-28 lg:w-0.5 lg:bg-linear-to-b" />
