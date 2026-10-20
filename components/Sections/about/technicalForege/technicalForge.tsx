@@ -6,10 +6,9 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-
 import { CATEGORIES } from "./categories";
 import { SkillCard } from "./skillCard";
-import { useAboutScroll } from "../aboutScroll";
+import { DESKTOP_QUERY, useAboutScroll } from "../aboutScroll";
 import GradientText from "@/components/UI/fireSpan/gradientText";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -33,11 +32,12 @@ export default function TechnicalForge() {
 
       mm.add(
         {
+          desktop: DESKTOP_QUERY,
           motion: "(prefers-reduced-motion: no-preference)",
           hover: "(hover: hover) and (pointer: fine)",
         },
         (context) => {
-          const { motion, hover } = context.conditions as Record<
+          const { desktop, motion, hover } = context.conditions as Record<
             string,
             boolean
           >;
@@ -56,7 +56,44 @@ export default function TechnicalForge() {
             /*    scroll up). Each letter scrambles when the head hits it.  */
             /* ============================================================ */
 
+            // later cards trail more, like `lag: (i) => i * 0.5` in the reference
+            const lag = 0.4 + 6 * 0.25;
+            const dur = 0.5 + 6 * 0.05;
 
+            // desktop = horizontal travel -> skewX + trailing x
+            // mobile / tablet = vertical scroll -> skewY (same as the reference)
+            const toSkew = gsap.quickTo(title, desktop ? "skewX" : "skewY", {
+              duration: dur,
+              ease: "power3.out",
+            });
+            const toLag = desktop
+              ? gsap.quickTo(title, "x", {
+                  duration: dur + 0.2,
+                  ease: "power3.out",
+                })
+              : null;
+
+            const clampSkew = gsap.utils.clamp(-20, 20);
+            const clampLag = gsap.utils.clamp(-80, 80);
+
+            ScrollTrigger.create({
+              start: 0,
+              end: "max",
+              onUpdate: (self) => {
+                // page scroll speed drives the horizontal track
+                const v = self.getVelocity();
+                toSkew(clampSkew(v / -40)); // flip the sign (v / 40) if the lean looks wrong
+                toLag?.(clampLag((v / 25) * lag));
+              },
+            });
+
+            const settle = () => {
+              toSkew(0);
+              toLag?.(0);
+            };
+            ScrollTrigger.addEventListener("scrollEnd", settle);
+            ScrollTrigger.removeEventListener("scrollEnd", settle);
+            
             /* ============================================================ */
             /* 2) CONTENT comes second: desktop cards enter only once the   */
             /*    title is almost done; mobile cards enter as they scroll   */
@@ -95,7 +132,7 @@ export default function TechnicalForge() {
                 typeof at0 === "number" ? at0 + 0.35 : "<0.35",
               );
             };
-
+            
             if (horizontal) {
               const tl = gsap.timeline({
                 scrollTrigger: {
@@ -119,7 +156,7 @@ export default function TechnicalForge() {
               });
             }
           }
-
+          
           /* ================================================================ */
           /* 3) CARD HOVER: scale + free 3D tilt + parallax + glare           */
           /* ================================================================ */
@@ -241,7 +278,10 @@ export default function TechnicalForge() {
             });
           }
 
-          return () => cleanups.forEach((fn) => fn());
+          return () => {
+            cleanups.forEach((fn) => fn());
+          }
+
         },
       );
 
@@ -257,7 +297,7 @@ export default function TechnicalForge() {
   return (
     <div
       ref={rootRef}
-      className="flex flex-col items-center justify-center px-4 lg:px-8 lg:pt-16"
+      className="flex flex-col items-center justify-center px-4 lg:pl-20  lg:pt-16"
     >
       {/* soft vignette so the cards sit in a pool of light rather than flat black */}
       {/* <div
@@ -269,11 +309,12 @@ export default function TechnicalForge() {
       /> */}
 
       {/* big gap on desktop: the title is read first, the content second */}
-      <div className="relative flex flex-col items-center justify-center gap-10 lg:flex-row lg:gap-60">
+      <div className="relative flex flex-col items-center justify-center gap-10 lg:flex-row lg:gap-52">
         <div
-          className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180"
+          ref={titleRef}
+          className="flex flex-col items-center gap-4 lg:[writing-mode:vertical-rl] lg:rotate-180 rotate-0"
         >
-          <h1 ref={titleRef} className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">
+          <h1 className="text-center lg:text-3xl text-2xl font-semibold uppercase tracking-[0.35em] text-zinc-300">
             Technical <GradientText inline={true}>Skills</GradientText>
           </h1>
           <span className="h-0.5 w-28 rounded-full bg-linear-to-r from-primary-container to-secondary lg:h-28 lg:w-0.5 lg:bg-linear-to-b" />

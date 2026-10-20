@@ -78,7 +78,10 @@ export function TraitCard({
             ease: "power3.out",
           });
           const toLag = desktop
-            ? gsap.quickTo(card, "x", { duration: dur + 0.2, ease: "power3.out" })
+            ? gsap.quickTo(card, "x", {
+                duration: dur + 0.2,
+                ease: "power3.out",
+              })
             : null;
 
           const clampSkew = gsap.utils.clamp(-20, 20);
@@ -101,24 +104,25 @@ export function TraitCard({
           };
           ScrollTrigger.addEventListener("scrollEnd", settle);
           return () => ScrollTrigger.removeEventListener("scrollEnd", settle);
-        }
+        },
       );
 
       return () => mm.revert();
     },
-    { scope: cardRef, dependencies: [index] }
+    { scope: cardRef, dependencies: [index] },
   );
 
   return (
     <div
       ref={cardRef}
-      className={` relative flex flex-col items-center justify-center gap-5 rounded-2xl border border-white/[0.07] bg-[#1a1a1a] px-6 py-16 md:py-22 cursor-default select-none overflow-hidden
-        transition-[translate,border-color,background-color,box-shadow] 
+      className={` px-8 py-16  md:py-20  flex flex-col gap-5         skill-card relative rounded-2xl border border-white/10
+          bg-linear-to-b from-white/4 to-white/1 p-6 mx-5
+          will-change-transform
         hover:-translate-y-1
         hover:border-orange-500/40
         hover:bg-[#1e1c1a]
         hover:shadow-[0_0_0_1px_rgba(249,115,22,0.2),0_8px_32px_rgba(249,115,22,0.12)]`}
-        >
+    >
       {/* Subtle radial glow behind icon on hover */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
