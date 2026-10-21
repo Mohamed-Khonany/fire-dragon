@@ -25,32 +25,29 @@ export default function SiteLoader({
   const topShutterRef = useRef<HTMLDivElement>(null);
   const bottomShutterRef = useRef<HTMLDivElement>(null);
   const seamRef = useRef<HTMLDivElement>(null);
+  const mainStageRef = useRef<HTMLDivElement>(null);
   const hudRef = useRef<HTMLDivElement>(null);
   const logoCoreRef = useRef<HTMLDivElement>(null);
   const percentTextRef = useRef<HTMLSpanElement>(null);
   const shockwaveRef = useRef<HTMLDivElement>(null);
-  const loaderSvgRef = useRef<SVGSVGElement>(null);
 
   const [percent, setPercent] = useState<number>(0);
   const [statusText, setStatusText] = useState<string>(
     "// 01: INITIALIZING SYSTEM CORE",
   );
-  const [isFinished, setIsFinished] = useState<boolean>(false);
 
-  // Keep a ref of progress for GSAP animation
   const progressObj = useRef({ value: 0 });
-  const realAssetsLoaded = useRef(false);
   const hasTransformed = useRef(false);
 
-  // Asset preloading & engine verification
+  // Asset preloading & scroll management
   useEffect(() => {
     let isMounted = true;
 
-    // Lock page scroll while loader is running
+    // Lock page scroll while loader is visible
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Initially hide header offscreen so it glides in during the transform
+    // Set initial header state so it glides in when the loader completes
     const header = document.getElementById("site-header");
     if (header) {
       gsap.set(header, { y: -80, opacity: 0 });
@@ -59,7 +56,7 @@ export default function SiteLoader({
     const preloadAssets = async () => {
       const tasks: Promise<any>[] = [];
 
-      // 1. Preload key critical images
+      // Preload critical images
       const imagesToLoad = [
         "/assets/images/logo/logo-banner.png",
         "/assets/images/logo/logo.png",
@@ -72,49 +69,45 @@ export default function SiteLoader({
             const img = new window.Image();
             img.src = src;
             img.onload = () => resolve();
-            img.onerror = () => resolve(); // don't freeze on error
+            img.onerror = () => resolve();
           }),
         );
       });
 
-      // 2. Wait for document fonts
+      // Wait for document fonts
       if (typeof document !== "undefined" && document.fonts) {
         tasks.push(document.fonts.ready.catch(() => {}));
       }
 
-      // 3. Confirm WebGL capability / Three.js
+      // Check WebGL / Three.js capability
       tasks.push(
         new Promise<void>((resolve) => {
           try {
             const testCanvas = document.createElement("canvas");
             const gl =
               testCanvas.getContext("webgl2") ||
-              testCanvas.getContext("webgl") ||
-              testCanvas.getContext("experimental-webgl");
+              testCanvas.getContext("webgl");
             if (gl) {
-              // WebGL initialized successfully
+              // WebGL confirmed
             }
           } catch (e) {
-            // Ignore if headless or restricted
+            // Ignore if restricted
           }
           resolve();
         }),
       );
 
-      // 4. Wait for document ready
+      // Document ready check
       if (document.readyState !== "complete") {
         tasks.push(
           new Promise<void>((resolve) => {
             window.addEventListener("load", () => resolve(), { once: true });
-            setTimeout(resolve, 3000); // safety fallback
+            setTimeout(resolve, 3000);
           }),
         );
       }
 
       await Promise.all(tasks);
-      if (isMounted) {
-        realAssetsLoaded.current = true;
-      }
     };
 
     preloadAssets();
@@ -125,197 +118,158 @@ export default function SiteLoader({
     };
   }, []);
 
-  // Coordinated GSAP progress counter & telemetry states
+  // Coordinated GSAP transform from loader to banner page
   const executeTransform = useCallback(() => {
     if (hasTransformed.current) return;
     hasTransformed.current = true;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          // Unlock body scroll
-          document.body.style.overflow = "";
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Unlock body scrolling
+        document.body.style.overflow = "";
 
-          // Callback to parent to initialize ScrollSmoother & ScrollTrigger
-          if (onComplete) {
-            onComplete();
-          }
+        // Completely hide loader container so it doesn't intercept clicks or consume GPU
+        if (containerRef.current) {
+          containerRef.current.style.display = "none";
+          containerRef.current.style.pointerEvents = "none";
+        }
 
-          // Refresh ScrollTrigger to recalculate offsets now that DOM is live
-          ScrollTrigger.refresh();
+        // Notify parent that loader transform is done
+        if (onComplete) {
+          onComplete();
+        }
 
-          setIsFinished(true);
-        },
+        // Recalculate ScrollTrigger positions
+        ScrollTrigger.refresh();
+      },
+    });
+
+    // 1. Supercharge ignition flash at 100%
+    if (percentTextRef.current) {
+      tl.to(percentTextRef.current, {
+        scale: 1.15,
+        color: "#ffffff",
+        filter: "drop-shadow(0 0 35px #ffcc00) drop-shadow(0 0 60px #ff6600)",
+        duration: 0.25,
+        ease: "power2.out",
       });
+    }
 
-      // 1. Charge / Supercharge ignition at 100%
-      if (percentTextRef.current) {
-        tl.to(percentTextRef.current, {
-          scale: 1.15,
-          color: "#ffffff",
-          filter: "drop-shadow(0 0 35px #ffcc00) drop-shadow(0 0 60px #ff6600)",
-          duration: 0.25,
+    // Shockwave burst
+    if (shockwaveRef.current) {
+      tl.fromTo(
+        shockwaveRef.current,
+        { scale: 0.4, opacity: 1 },
+        {
+          scale: 3.5,
+          opacity: 0,
+          duration: 0.65,
+          ease: "power3.out",
+        },
+        "<",
+      );
+    }
+
+    // 2. HUD & telemetry fade out
+    if (hudRef.current) {
+      tl.to(
+        hudRef.current,
+        {
+          opacity: 0,
+          y: 35,
+          scale: 0.88,
+          duration: 0.35,
+          ease: "power3.in",
+        },
+        "-=0.15",
+      );
+    }
+
+    // 3. Fade out the loader's central stage and circuit
+    if (mainStageRef.current) {
+      tl.to(
+        mainStageRef.current,
+        {
+          opacity: 0,
+          scale: 0.96,
+          duration: 0.45,
+          ease: "power2.inOut",
+        },
+        "-=0.2",
+      );
+    }
+
+    // 4. Molten seam line dissipates
+    if (seamRef.current) {
+      tl.to(
+        seamRef.current,
+        {
+          scaleY: 6,
+          opacity: 0,
+          filter: "blur(8px)",
+          duration: 0.45,
           ease: "power2.out",
-        });
-      }
+        },
+        "-=0.2",
+      );
+    }
 
-      // Shockwave burst
-      if (shockwaveRef.current) {
-        tl.fromTo(
-          shockwaveRef.current,
-          { scale: 0.4, opacity: 1 },
-          {
-            scale: 3.5,
-            opacity: 0,
-            duration: 0.65,
-            ease: "power3.out",
-          },
-          "<",
-        );
-      }
+    // 5. Part the shutters (top goes up, bottom goes down)
+    if (topShutterRef.current && bottomShutterRef.current) {
+      tl.to(
+        topShutterRef.current,
+        {
+          yPercent: -100,
+          duration: 0.95,
+          ease: "power4.inOut",
+        },
+        "-=0.35",
+      );
 
-      // 2. HUD & Telemetry dissolve
-      if (hudRef.current) {
-        tl.to(
-          hudRef.current,
-          {
-            opacity: 0,
-            y: 35,
-            scale: 0.88,
-            duration: 0.4,
-            ease: "power3.in",
-          },
-          "-=0.2",
-        );
-      }
+      tl.to(
+        bottomShutterRef.current,
+        {
+          yPercent: 100,
+          duration: 0.95,
+          ease: "power4.inOut",
+        },
+        "<",
+      );
+    }
 
-      // 3. Central Logo & Circuit alignment morph into Banner
-      if (logoCoreRef.current) {
-        tl.to(
-          logoCoreRef.current,
-          {
-            scale: 1.05,
-            duration: 0.45,
-            ease: "power2.inOut",
-          },
-          "-=0.3",
-        );
-      }
+    // 6. Synchronized entrance for the banner and header
+    const bannerLogo = document.querySelector(".banner-logo");
+    const header = document.getElementById("site-header");
 
-      // 4. Shutter separation with molten seam blast
-      if (seamRef.current) {
-        tl.to(
-          seamRef.current,
-          {
-            scaleY: 8,
-            opacity: 0,
-            filter: "blur(8px)",
-            duration: 0.5,
-            ease: "power2.out",
-          },
-          "-=0.2",
-        );
-      }
+    if (bannerLogo) {
+      tl.from(
+        bannerLogo,
+        {
+          scale: 1.15,
+          duration: 0.65,
+          ease: "power2.out",
+          clearProps: "all",
+        },
+        "-=0.6",
+      );
+    }
 
-      if (topShutterRef.current && bottomShutterRef.current) {
-        tl.to(
-          topShutterRef.current,
-          {
-            yPercent: -100,
-            duration: 0.95,
-            ease: "power4.inOut",
-          },
-          "-=0.35",
-        );
-
-        tl.to(
-          bottomShutterRef.current,
-          {
-            yPercent: 100,
-            duration: 0.95,
-            ease: "power4.inOut",
-          },
-          "<",
-        );
-      }
-
-      // Fade out loader root container
-      if (containerRef.current) {
-        tl.to(
-          containerRef.current,
-          {
-            opacity: 0,
-            duration: 0.4,
-            ease: "power2.out",
-          },
-          "-=0.3",
-        );
-      }
-
-      // 5. Staggered Banner entrance behind the opening shutters
-      const bannerLogo = document.querySelector(".banner-logo");
-      const bannerTitle = document.querySelector(".banner-title");
-      const bannerSvg = document.querySelector(".banner-svg");
-      const header = document.getElementById("site-header");
-
-      if (bannerLogo) {
-        tl.fromTo(
-          bannerLogo,
-          { scale: 1.25, opacity: 0.6, filter: "drop-shadow(0 0 35px #ff6600)" },
-          {
-            scale: 1,
-            opacity: 1,
-            filter: "drop-shadow(0 0 10px rgba(255, 90, 0, 0.4))",
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.7",
-        );
-      }
-
-      if (bannerTitle) {
-        tl.fromTo(
-          bannerTitle,
-          { y: 50, opacity: 0, filter: "blur(6px)" },
-          {
-            y: 0,
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 0.85,
-            ease: "power3.out",
-          },
-          "-=0.6",
-        );
-      }
-
-      if (bannerSvg) {
-        tl.fromTo(
-          bannerSvg,
-          { opacity: 0.3, scale: 0.97 },
-          { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" },
-          "-=0.7",
-        );
-      }
-
-      // Header glides down smoothly
-      if (header) {
-        tl.to(
-          header,
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power2.out",
-          },
-          "-=0.5",
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
+    if (header) {
+      tl.to(
+        header,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.65,
+          ease: "power2.out",
+          clearProps: "all",
+        },
+        "-=0.5",
+      );
+    }
   }, [onComplete]);
 
-  // Main progress animation loop
+  // Main progress counter animation loop
   useGSAP(
     () => {
       const tl = gsap.timeline({
@@ -354,7 +308,6 @@ export default function SiteLoader({
           duration: minDuration * 0.2,
           ease: "power2.inOut",
           onComplete: () => {
-            // Once 100% is reached, trigger the transform
             executeTransform();
           },
         });
@@ -362,7 +315,7 @@ export default function SiteLoader({
     { scope: containerRef, dependencies: [minDuration, executeTransform] },
   );
 
-  // Manual skip function for accessibility / testing
+  // Manual skip function for accessibility & testing
   const handleSkip = () => {
     gsap.killTweensOf(progressObj.current);
     progressObj.current.value = 100;
@@ -382,19 +335,15 @@ export default function SiteLoader({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  if (isFinished) {
-    return null;
-  }
-
-  // Circular gauge circumference for r=54
-  const circumference = 2 * Math.PI * 54; // ~339.29
+  // Circular gauge calculations
+  const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
     <div
       ref={containerRef}
       id="site-loader"
-      className="site-loader-root fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-[#0d0e0f] select-none"
+      className="site-loader-root fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-transparent select-none"
       aria-label="Site Loading"
       role="progressbar"
       aria-valuenow={percent}
@@ -406,7 +355,6 @@ export default function SiteLoader({
         ref={topShutterRef}
         className="absolute inset-x-0 top-0 h-1/2 bg-[#0d0e0f] loader-grid-bg loader-radial-glow border-b border-white/5 overflow-hidden z-10"
       >
-        {/* Top subtle lighting spots */}
         <div
           className="fire-light-1 pointer-events-none absolute rounded-full"
           style={{
@@ -425,7 +373,6 @@ export default function SiteLoader({
         ref={bottomShutterRef}
         className="absolute inset-x-0 bottom-0 h-1/2 bg-[#0d0e0f] loader-grid-bg loader-radial-glow border-t border-white/5 overflow-hidden z-10"
       >
-        {/* Bottom subtle lighting spots */}
         <div
           className="fire-light-2 pointer-events-none absolute rounded-full"
           style={{
@@ -446,10 +393,10 @@ export default function SiteLoader({
       />
 
       {/* ================= CORNER HUD TARGETS ================= */}
-      <div className="hud-corner hud-tl" />
-      <div className="hud-corner hud-tr" />
-      <div className="hud-corner hud-bl" />
-      <div className="hud-corner hud-br" />
+      <div className="hud-corner hud-tl z-30" />
+      <div className="hud-corner hud-tr z-30" />
+      <div className="hud-corner hud-bl z-30" />
+      <div className="hud-corner hud-br z-30" />
 
       {/* Top telemetry bar */}
       <div className="absolute top-6 inset-x-8 flex justify-between items-center z-30 pointer-events-none">
@@ -464,7 +411,7 @@ export default function SiteLoader({
         </span>
       </div>
 
-      {/* Bottom telemetry & Skip trigger */}
+      {/* Bottom telemetry & Skip button */}
       <div className="absolute bottom-6 inset-x-8 flex justify-between items-center z-30">
         <span className="telemetry-code text-[11px] text-[#ffb59a]/70 font-mono tracking-wider">
           STATUS: {percent < 100 ? "SYNCING MATRICES" : "ONLINE"}
@@ -480,7 +427,10 @@ export default function SiteLoader({
       </div>
 
       {/* ================= MAIN LOADER STAGE ================= */}
-      <div className="fire-wrapper relative flex flex-col items-center justify-center w-full h-full z-20 pointer-events-none">
+      <div
+        ref={mainStageRef}
+        className="fire-wrapper relative flex flex-col items-center justify-center w-full h-full z-20 pointer-events-none"
+      >
         {/* Glow light top-left */}
         <div
           className="fire-light-1 pointer-events-none absolute rounded-full z-10"
@@ -642,7 +592,6 @@ export default function SiteLoader({
         {/* ================= ANIMATED SVG CIRCUIT MATRIX ================= */}
         {/* Utilizing Path and Line from animated-path.tsx with same coordinates as animated-banner.tsx */}
         <svg
-          ref={loaderSvgRef}
           className="fire-ai-bg absolute pointer-events-none"
           style={{ fill: "none" }}
           xmlns="http://www.w3.org/2000/svg"
@@ -746,7 +695,7 @@ export default function SiteLoader({
           <circle className="fire-dot" cx="179.81" cy="218.46" r="1.17" />
           <Path d="M134.04,186.42v18.37c0,.72-.29,1.41-.8,1.92l-4.28,4.28c-.51.51-.8,1.2-.8,1.92v14.37" />
           <circle className="fire-dot" cx="128.17" cy="228.46" r="1.17" />
-          <Path d="M126.06,186.42v10.37c0,.72-.29,1.41-.8,1.92l-4.28,4.28c-.51-.51-.8-1.2-.8-1.92v10.69" />
+          <Path d="M126.06,186.42v10.37c0,.72-.29,1.41-.8,1.92l-4.28,4.28c-.51.51-.8,1.2-.8,1.92v10.69" />
           <circle className="fire-dot" cx="120.19" cy="216.77" r="1.17" />
           <Path d="M165.96,186.42v20.37c0,.72.29,1.41.8,1.92l4.28,4.28c.51.51.8,1.2.8,1.92v9.37" />
           <circle className="fire-dot" cx="171.83" cy="225.46" r="1.17" />
