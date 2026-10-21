@@ -21,7 +21,7 @@ interface SiteLoaderProps {
 export default function SiteLoader({
   onStartReveal,
   onComplete,
-  minDuration = 2.4,
+  minDuration = 10,
 }: SiteLoaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const topShutterRef = useRef<HTMLDivElement>(null);
@@ -332,16 +332,6 @@ export default function SiteLoader({
     executeTransform();
   };
 
-  // Keyboard shortcut: ESC to skip
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleSkip();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   // Circular gauge calculations
   const circumference = 2 * Math.PI * 54;
@@ -406,33 +396,6 @@ export default function SiteLoader({
       <div className="hud-corner hud-bl z-30" />
       <div className="hud-corner hud-br z-30" />
 
-      {/* Top telemetry bar */}
-      <div className="absolute top-6 inset-x-8 flex justify-between items-center z-30 pointer-events-none">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[#ff5a00] animate-ping" />
-          <span className="telemetry-code text-[11px] text-[#ffb59a]/70 font-mono tracking-wider">
-            SYSTEM: FIRE DRAGON // CORE V4.1
-          </span>
-        </div>
-        <span className="telemetry-code text-[11px] text-[#ffb59a]/70 font-mono tracking-wider hidden sm:inline-block">
-          ENGINE: THREE.JS + GSAP
-        </span>
-      </div>
-
-      {/* Bottom telemetry & Skip button */}
-      <div className="absolute bottom-6 inset-x-8 flex justify-between items-center z-30">
-        <span className="telemetry-code text-[11px] text-[#ffb59a]/70 font-mono tracking-wider">
-          STATUS: {percent < 100 ? "SYNCING MATRICES" : "ONLINE"}
-        </span>
-        <button
-          type="button"
-          onClick={handleSkip}
-          className="telemetry-code text-[11px] text-[#ffcc00]/80 hover:text-white font-mono tracking-widest px-3 py-1 rounded border border-[#ff5a00]/30 hover:border-[#ffcc00] hover:bg-[#ff5a00]/20 transition-all duration-300 pointer-events-auto cursor-pointer"
-          title="Skip Intro Animation"
-        >
-          [ SKIP INTRO // ESC ]
-        </button>
-      </div>
 
       {/* ================= MAIN LOADER STAGE ================= */}
       <div
@@ -474,13 +437,13 @@ export default function SiteLoader({
         {/* Central Logo & Reactor Ring */}
         <div
           ref={logoCoreRef}
-          className="relative flex flex-col items-center justify-center z-20 core-pulse"
+          className="relative flex flex-col items-center mb-10 justify-center z-20 core-pulse"
         >
           {/* Circular SVG Gauge & Reactor Rings */}
           <svg
             className="absolute -inset-10 m-auto pointer-events-none"
-            width="220"
-            height="220"
+            width="180"
+            height="180"
             viewBox="0 0 140 140"
           >
             <defs>
@@ -555,8 +518,8 @@ export default function SiteLoader({
             <Image
               src={Logo}
               alt="Fire Dragon Logo"
-              width={160}
-              height={160}
+              width={100}
+              height={100}
               className="object-contain drop-shadow-[0_0_20px_rgba(255,90,0,0.6)]"
               priority
             />
@@ -566,13 +529,13 @@ export default function SiteLoader({
         {/* ================= PERCENTAGE NUMBER & TELEMETRY HUD ================= */}
         <div
           ref={hudRef}
-          className="flex flex-col items-center justify-center mt-8 z-20 pointer-events-none"
+          className="flex flex-col items-center justify-center mt-3 z-20 pointer-events-none"
         >
           {/* Main Percentage Display */}
           <div className="flex items-baseline gap-1">
             <span
               ref={percentTextRef}
-              className="font-mono font-black text-6xl md:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#ff3300] via-[#ff9900] to-[#ffcc00] percent-glow"
+              className="font-mono font-black text-6xl md:text-7xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#ff3300] via-[#ff9900] to-[#ffcc00] percent-glow"
             >
               {percent}
             </span>
