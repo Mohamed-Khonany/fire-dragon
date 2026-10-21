@@ -25,6 +25,7 @@ export const Header = () => {
 
   return (
     <header
+      id="site-header"
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent border-transparent`}
     >
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop pt-2  max-w-container-max mx-auto">

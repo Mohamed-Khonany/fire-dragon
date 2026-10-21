@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 
 const LightboxModal = ({ src, onClose }:{ src: string; onClose: () => void }) => {
-  const modalRef = useRef(null); // Reference for the modal container
+  const modalRef = useRef<HTMLDivElement>(null); // Reference for the modal container
 
   // Close the modal if clicked outside
   useEffect(() => {
-    const handleClickOutside = ({event}:{ event: MouseEvent }) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClose(); // Close the modal when clicked outside
       }
     };

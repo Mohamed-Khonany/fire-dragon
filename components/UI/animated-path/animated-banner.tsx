@@ -42,16 +42,16 @@ export default function AnimatedBanner({
 
         {/* Logo Button */}
         {isHome && (
-          <div className="flex flex-col items-center justify-center z-10">
+          <div className="banner-hero-content flex flex-col items-center justify-center z-10">
             <Image
               src={Logo}
               height={300}
               width={300}
               alt="fire-dragon-logo"
-              className="object-contain drop-shadow-lg transition-transform duration-500 ease-in-out transform "
+              className="banner-logo object-contain drop-shadow-lg transition-transform duration-500 ease-in-out transform"
               priority
             />
-            <span className="text-[46px] font-extrabold text-on-surface tracking-widest cursor-default">
+            <span className="banner-title text-[46px] font-extrabold text-on-surface tracking-widest cursor-default">
               <GradientText inline={true}>{heroData.firstName}</GradientText>{" "}
               {heroData.lastName}
             </span>
@@ -60,7 +60,7 @@ export default function AnimatedBanner({
 
         {/* Animated SVG background */}
         <svg
-          className="fire-ai-bg absolute"
+          className="fire-ai-bg banner-svg absolute"
           style={{ fill: "none" }}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="70 70 160 160"

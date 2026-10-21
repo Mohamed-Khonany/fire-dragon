@@ -1,0 +1,163 @@
+/* =========================================================================
+   SITE LOADER STYLES - FIRE DRAGON
+   ========================================================================= */
+
+.site-loader-root {
+  --accent-1: #ff6600;
+  --accent-2: #ffcc00;
+  --accent-3: #ff2200;
+  --accent-4: rgba(255, 102, 0, 0.35);
+  --accent-glow: rgba(255, 90, 0, 0.6);
+  --bg-dark: #0d0e0f;
+  --bg-surface: #121414;
+}
+
+/* Subtle cybernetic blueprint grid */
+.loader-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 102, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 102, 0, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Radial dark vignette with fiery core ambient glow */
+.loader-radial-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 90, 0, 0.16) 0%, rgba(255, 34, 0, 0.05) 45%, #0d0e0f 75%);
+}
+
+/* Central reactor rings */
+.reactor-ring-outer {
+  transform-origin: center;
+  animation: reactorSpinCw 14s linear infinite;
+}
+
+.reactor-ring-inner {
+  transform-origin: center;
+  animation: reactorSpinCcw 9s linear infinite;
+}
+
+@keyframes reactorSpinCw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reactorSpinCcw {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Pulsing energy core */
+.core-pulse {
+  animation: corePulseKey 2.4s ease-in-out infinite;
+}
+
+@keyframes corePulseKey {
+  0%, 100% {
+    transform: scale(0.97);
+    filter: drop-shadow(0 0 16px rgba(255, 90, 0, 0.45));
+  }
+  50% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 32px rgba(255, 102, 0, 0.85)) drop-shadow(0 0 60px rgba(255, 204, 0, 0.4));
+  }
+}
+
+/* Shockwave blast when reaching 100% */
+.loader-shockwave {
+  position: absolute;
+  border-radius: 9999px;
+  border: 2px solid var(--accent-2);
+  box-shadow: 0 0 30px var(--accent-1), inset 0 0 20px var(--accent-2);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+/* Molten seam line between shutters */
+.molten-seam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 34, 0, 0.4) 15%,
+    #ff6600 35%,
+    #ffcc00 50%,
+    #ff6600 65%,
+    rgba(255, 34, 0, 0.4) 85%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 20px #ff6600,
+    0 0 45px #ffcc00,
+    0 0 90px rgba(255, 90, 0, 0.8);
+  z-index: 50;
+}
+
+/* High-tech telemetry readout text */
+.telemetry-code {
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Percentage glow */
+.percent-glow {
+  text-shadow:
+    0 0 20px rgba(255, 90, 0, 0.7),
+    0 0 40px rgba(255, 204, 0, 0.4);
+}
+
+/* Corner HUD targeting brackets */
+.hud-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(255, 102, 0, 0.4);
+  pointer-events: none;
+}
+
+.hud-tl {
+  top: 18px;
+  left: 18px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+
+.hud-tr {
+  top: 18px;
+  right: 18px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+
+.hud-bl {
+  bottom: 18px;
+  left: 18px;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+
+.hud-br {
+  bottom: 18px;
+  right: 18px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+/* Progress bar glowing beacon */
+.progress-beacon {
+  box-shadow:
+    0 0 12px #ffcc00,
+    0 0 24px #ff6600;
+}
