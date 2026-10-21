@@ -22,10 +22,24 @@ export const Header = () => {
   }, []);
 
   const isHomePage = pathname !== "/" || scrolled;
+  const isLoaded =
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("site-loaded");
+  const shouldHideInitially = pathname === "/" && !isLoaded;
 
   return (
     <header
       id="site-header"
+      style={
+        shouldHideInitially
+          ? {
+              opacity: 0,
+              transform: "translateY(-80px)",
+              pointerEvents: "none",
+              visibility: "hidden",
+            }
+          : undefined
+      }
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent border-transparent`}
     >
       <div className="flex justify-between items-center px-margin-mobile md:px-margin-desktop pt-2  max-w-container-max mx-auto">

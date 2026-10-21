@@ -14,6 +14,7 @@ import {
   Vector2,
   Vector3,
   Vector4,
+  LoadingManager,
 } from "three";
 
 gsap.registerPlugin(useGSAP);
@@ -46,6 +47,7 @@ export interface GlowCursorProps {
   ringSize?: number;
   ringBorderWidth?: number;
   interactiveSelector?: string;
+  onLoaded?: () => void;
 }
 
 const DEFAULT_INTERACTIVE =
@@ -233,6 +235,7 @@ export default function GlowCursor({
   ringSize = 70,
   ringBorderWidth = 3,
   interactiveSelector = DEFAULT_INTERACTIVE,
+  onLoaded,
 }: GlowCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -241,10 +244,14 @@ export default function GlowCursor({
   // `dot` = 0..1 visibility of the dot (hidden until first move / when leaving the window)
   const stateRef = useRef({ fade: 0, enabled: enabled ? 1 : 0, dot: 0 });
   const activeRef = useRef(false); // true once the cursor is actually running (fine pointer, motion ok)
+  const materialsLoadedRef = useRef(false); // true only after Three.js LoadingManager confirms materials are loaded
 
   const cfgRef = useRef(
     {} as Required<
-      Omit<GlowCursorProps, "zIndex" | "maxDevicePixelRatio" | "enabled">
+      Omit<
+        GlowCursorProps,
+        "zIndex" | "maxDevicePixelRatio" | "enabled" | "onLoaded"
+      >
     >,
   );
   cfgRef.current = {
@@ -277,7 +284,7 @@ export default function GlowCursor({
       duration: 0.35,
       ease: "power2.out",
     });
-    if (activeRef.current)
+    if (activeRef.current && materialsLoadedRef.current)
       document.documentElement.classList.toggle("glow-cursor-on", enabled);
     return () => {
       tween.kill();
@@ -298,13 +305,58 @@ export default function GlowCursor({
 
       const state = stateRef.current;
 
-      // ---------- Hide the native cursor (only now that the custom one is live) ----------
+      // ---------- Prepare style to hide native cursor (applied ONLY when materials load) ----------
       const styleEl = document.createElement("style");
       styleEl.textContent =
         "html.glow-cursor-on, html.glow-cursor-on * { cursor: none !important; }";
       document.head.appendChild(styleEl);
-      activeRef.current = true;
-      document.documentElement.classList.toggle("glow-cursor-on", enabled);
+
+      // Keep native cursor active until Three.js LoadingManager signals complete load
+      document.documentElement.classList.remove("glow-cursor-on");
+
+      // Initial state: hide custom cursor elements until materials are ready
+      canvas.style.opacity = "0";
+      canvas.style.transition = "opacity 0.4s ease-out";
+      dotEl.style.visibility = "hidden";
+      dotEl.style.opacity = "0";
+
+      // Setup Three.js LoadingManager to track materials/shader compilation
+      const loadingManager = new LoadingManager();
+
+      loadingManager.onLoad = () => {
+        materialsLoadedRef.current = true;
+        activeRef.current = true;
+
+        // Custom cursor materials are 100% ready -> now hide native cursor
+        if (enabled) {
+          document.documentElement.classList.add("glow-cursor-on");
+        }
+
+        // Reveal custom cursor elements smoothly
+        if (dotEl) {
+          dotEl.style.visibility = "visible";
+        }
+        if (canvas) {
+          gsap.to(canvas, { opacity: 1, duration: 0.35, ease: "power2.out" });
+        }
+
+        if (onLoaded) {
+          onLoaded();
+        }
+      };
+
+      loadingManager.onError = (url) => {
+        console.warn("GlowCursor LoadingManager error on:", url);
+        // Fallback so user isn't left without custom cursor if error occurs
+        materialsLoadedRef.current = true;
+        activeRef.current = true;
+        if (enabled) {
+          document.documentElement.classList.add("glow-cursor-on");
+        }
+        if (dotEl) {
+          dotEl.style.visibility = "visible";
+        }
+      };
 
       // ---------- Three.js setup ----------
       const renderer = new WebGLRenderer({
@@ -373,6 +425,30 @@ export default function GlowCursor({
       const mesh = new Mesh(geometry, material);
       mesh.frustumCulled = false;
       scene.add(mesh);
+
+      // Register material loading with LoadingManager
+      loadingManager.itemStart("glow-cursor-material");
+
+      // Compile shaders and notify LoadingManager
+      const compileShaders = async () => {
+        try {
+          if (typeof (renderer as any).compileAsync === "function") {
+            await (renderer as any).compileAsync(scene, camera);
+          } else {
+            renderer.compile(scene, camera);
+          }
+        } catch (e) {
+          try {
+            renderer.compile(scene, camera);
+          } catch (err) {
+            // Ignore compilation warning in non-standard context
+          }
+        } finally {
+          loadingManager.itemEnd("glow-cursor-material");
+        }
+      };
+
+      compileShaders();
 
       const u = material.uniforms;
 
@@ -544,6 +620,7 @@ export default function GlowCursor({
       };
 
       const onPointerMove = (e: PointerEvent) => {
+        if (!materialsLoadedRef.current) return;
         const x = e.clientX;
         const y = height - e.clientY; // the shader's y axis points up
 
@@ -595,6 +672,7 @@ export default function GlowCursor({
 
       // ---------- GSAP ticker: move the chain + render ----------
       const render = (time: number) => {
+        if (!materialsLoadedRef.current) return;
         // Dot visibility (cheap: only touches the DOM when the value changes)
         const dotOpacity = state.dot * state.enabled;
         if (Math.abs(dotOpacity - lastDotOpacity) > 0.001) {
@@ -702,6 +780,7 @@ export default function GlowCursor({
         document.documentElement.classList.remove("glow-cursor-on");
         styleEl.remove();
         activeRef.current = false;
+        materialsLoadedRef.current = false;
         geometry.dispose();
         material.dispose();
         renderer.dispose();
@@ -717,7 +796,7 @@ export default function GlowCursor({
         ref={canvasRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 h-screen w-screen select-none"
-        style={{ zIndex, mixBlendMode: blendMode }}
+        style={{ zIndex, mixBlendMode: blendMode, opacity: 0 }}
       />
       {/* Dot -> ring. The outer element is the ring (border + size); the fill is the gradient dot. */}
       <div
@@ -734,6 +813,7 @@ export default function GlowCursor({
           borderColor: withAlpha(color, 0),
           boxShadow: `${withAlpha(color, 0)} 0px 0px 0px 1px, ${withAlpha(color, 0)} 0px 0px 0px 1px inset`,
           opacity: 0,
+          visibility: "hidden",
           willChange: "transform, width, height",
         }}
       >

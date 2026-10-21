@@ -49,16 +49,18 @@ export default function SiteLoader({
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Set initial header state so it glides in when the loader completes
+    // Ensure initial header state is completely hidden
     const header = document.getElementById("site-header");
     if (header) {
+      header.style.visibility = "hidden";
+      header.style.pointerEvents = "none";
       gsap.set(header, { y: -80, opacity: 0 });
     }
 
     const preloadAssets = async () => {
       const tasks: Promise<any>[] = [];
 
-      // Preload critical images
+      // Preload critical images asynchronously
       const imagesToLoad = [
         "/assets/images/logo/logo-banner.png",
         "/assets/images/logo/logo.png",
@@ -76,37 +78,9 @@ export default function SiteLoader({
         );
       });
 
-      // Wait for document fonts
+      // Wait for document fonts if supported
       if (typeof document !== "undefined" && document.fonts) {
         tasks.push(document.fonts.ready.catch(() => {}));
-      }
-
-      // Check WebGL / Three.js capability
-      tasks.push(
-        new Promise<void>((resolve) => {
-          try {
-            const testCanvas = document.createElement("canvas");
-            const gl =
-              testCanvas.getContext("webgl2") ||
-              testCanvas.getContext("webgl");
-            if (gl) {
-              // WebGL confirmed
-            }
-          } catch (e) {
-            // Ignore if restricted
-          }
-          resolve();
-        }),
-      );
-
-      // Document ready check
-      if (document.readyState !== "complete") {
-        tasks.push(
-          new Promise<void>((resolve) => {
-            window.addEventListener("load", () => resolve(), { once: true });
-            setTimeout(resolve, 3000);
-          }),
-        );
       }
 
       await Promise.all(tasks);
@@ -249,6 +223,9 @@ export default function SiteLoader({
     const bannerLogo = document.querySelector(".banner-logo");
     const header = document.getElementById("site-header");
 
+    // Mark site as loaded to enable header interactions and unlock global styles
+    document.documentElement.classList.add("site-loaded");
+
     if (bannerLogo) {
       tl.from(
         bannerLogo,
@@ -263,6 +240,8 @@ export default function SiteLoader({
     }
 
     if (header) {
+      header.style.visibility = "visible";
+      header.style.pointerEvents = "auto";
       tl.to(
         header,
         {

@@ -23,6 +23,7 @@ export default function Root() {
       smooth: 2,
       effects: true,
       normalizeScroll: true,
+      smoothTouch: 0,
     });
     // Pause scroll while loader is running
     smootherRef.current.paused(true);

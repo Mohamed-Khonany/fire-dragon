@@ -16,6 +16,7 @@ export default function NotFound() {
   const router = useRouter();
   useEffect(() => {
     setMounted(true);
+    document.documentElement.classList.add("site-loaded");
   }, []);
 
   return (

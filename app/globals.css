@@ -3,7 +3,7 @@
 @import "../styles/theme.css";
 @import "../styles/typography.css";
 @import "../styles/animations.css";
-
+@import "../components/UI/loader/site-loader.css";
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -16,3 +16,40 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* =========================================================================
+   GLOBAL SCROLLBAR REMOVAL (ALL BROWSERS & CONTAINERS)
+   ========================================================================= */
+
+/* Firefox, IE and modern standards */
+html,
+body,
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* WebKit / Blink (Chrome, Safari, Edge, Opera) */
+*::-webkit-scrollbar,
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* =========================================================================
+   INITIAL LOAD STATE (NO NAVBAR / NO SCROLLBAR FLASH BEFORE LOADER)
+   ========================================================================= */
+
+html:not(.site-loaded),
+html:not(.site-loaded) body {
+  overflow: hidden !important;
+}
+
+html:not(.site-loaded) #site-header {
+  opacity: 0 !important;
+  transform: translateY(-80px) !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
