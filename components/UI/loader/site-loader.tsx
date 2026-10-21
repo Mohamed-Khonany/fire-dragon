@@ -13,11 +13,13 @@ import Logo from "@/public/assets/images/logo/logo-banner.png";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 interface SiteLoaderProps {
+  onStartReveal?: () => void;
   onComplete?: () => void;
   minDuration?: number;
 }
 
 export default function SiteLoader({
+  onStartReveal,
   onComplete,
   minDuration = 2.4,
 }: SiteLoaderProps) {
@@ -216,6 +218,12 @@ export default function SiteLoader({
 
     // 5. Part the shutters (top goes up, bottom goes down)
     if (topShutterRef.current && bottomShutterRef.current) {
+      tl.call(() => {
+        if (onStartReveal) {
+          onStartReveal();
+        }
+      }, undefined, "-=0.35");
+
       tl.to(
         topShutterRef.current,
         {
@@ -343,7 +351,7 @@ export default function SiteLoader({
     <div
       ref={containerRef}
       id="site-loader"
-      className="site-loader-root fixed inset-0 z-[10000] flex items-center justify-center overflow-hidden bg-transparent select-none"
+      className="site-loader-root flex items-center justify-center overflow-hidden select-none"
       aria-label="Site Loading"
       role="progressbar"
       aria-valuenow={percent}
@@ -353,7 +361,7 @@ export default function SiteLoader({
       {/* ================= TOP SHUTTER PANEL ================= */}
       <div
         ref={topShutterRef}
-        className="absolute inset-x-0 top-0 h-1/2 bg-[#0d0e0f] loader-grid-bg loader-radial-glow border-b border-white/5 overflow-hidden z-10"
+        className="loader-shutter-top loader-grid-bg loader-radial-glow border-b border-white/5"
       >
         <div
           className="fire-light-1 pointer-events-none absolute rounded-full"
@@ -371,7 +379,7 @@ export default function SiteLoader({
       {/* ================= BOTTOM SHUTTER PANEL ================= */}
       <div
         ref={bottomShutterRef}
-        className="absolute inset-x-0 bottom-0 h-1/2 bg-[#0d0e0f] loader-grid-bg loader-radial-glow border-t border-white/5 overflow-hidden z-10"
+        className="loader-shutter-bottom loader-grid-bg loader-radial-glow border-t border-white/5"
       >
         <div
           className="fire-light-2 pointer-events-none absolute rounded-full"
