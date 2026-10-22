@@ -42,7 +42,7 @@ export default function AnimatedBanner({
 
         {/* Logo Button */}
         {isHome && (
-          <div className="banner-hero-content flex flex-col items-center justify-center z-10">
+          <div className="banner-hero-content banner-content-el flex flex-col items-center justify-center z-10">
             <Image
               src={Logo}
               height={300}
@@ -60,7 +60,7 @@ export default function AnimatedBanner({
 
         {/* Animated SVG background */}
         <svg
-          className="fire-ai-bg banner-svg absolute"
+          className="fire-ai-bg banner-svg banner-svg-el absolute"
           style={{ fill: "none" }}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="70 70 160 160"
