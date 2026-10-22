@@ -1,5 +1,4 @@
-"use client";
-
+import { isValidElement, type ElementType, type ReactNode } from "react";
 import {
   Search,
   Lightbulb,
@@ -12,19 +11,13 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import { useRef } from "react";
+type TraitCardProps = {
+  index: number;
+  label: string;
+  icon?: ReactNode | ElementType;
+  description?: string;
+};
 
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-import { DESKTOP_QUERY } from "../aboutScroll";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
-
-// ─────────────────────────────────────────────
-// Types & Data
-// ─────────────────────────────────────────────
 interface Trait {
   label: string;
   icon: LucideIcon;
@@ -41,112 +34,52 @@ export const TRAITS: Trait[] = [
   { label: "Leadership", icon: Crown },
 ];
 
-// ─────────────────────────────────────────────
-// TraitCard
-// ─────────────────────────────────────────────
-export function TraitCard({
-  label,
-  icon: Icon,
-  index,
-}: Trait & { index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      const card = cardRef.current;
-      if (!card) return;
-
-      const mm = gsap.matchMedia();
-
-      mm.add(
-        {
-          desktop: DESKTOP_QUERY,
-          motion: "(prefers-reduced-motion: no-preference)",
-        },
-        (ctx) => {
-          const { desktop, motion } = ctx.conditions as Record<string, boolean>;
-          if (!motion) return;
-
-          // later cards trail more, like `lag: (i) => i * 0.5` in the reference
-          const lag = 0.4 + index * 0.25;
-          const dur = 0.5 + index * 0.05;
-
-          // desktop = horizontal travel -> skewX + trailing x
-          // mobile / tablet = vertical scroll -> skewY (same as the reference)
-          const toSkew = gsap.quickTo(card, desktop ? "skewX" : "skewY", {
-            duration: dur,
-            ease: "power3.out",
-          });
-          const toLag = desktop
-            ? gsap.quickTo(card, "x", {
-                duration: dur + 0.2,
-                ease: "power3.out",
-              })
-            : null;
-
-          const clampSkew = gsap.utils.clamp(-20, 20);
-          const clampLag = gsap.utils.clamp(-80, 80);
-
-          ScrollTrigger.create({
-            start: 0,
-            end: "max",
-            onUpdate: (self) => {
-              // page scroll speed drives the horizontal track
-              const v = self.getVelocity();
-              toSkew(clampSkew(v / -40)); // flip the sign (v / 40) if the lean looks wrong
-              toLag?.(clampLag((v / 25) * lag));
-            },
-          });
-
-          const settle = () => {
-            toSkew(0);
-            toLag?.(0);
-          };
-          ScrollTrigger.addEventListener("scrollEnd", settle);
-          return () => ScrollTrigger.removeEventListener("scrollEnd", settle);
-        },
-      );
-
-      return () => mm.revert();
-    },
-    { scope: cardRef, dependencies: [index] },
-  );
+export function TraitCard({ index, label, icon, description }: TraitCardProps) {
+  const Icon = icon as ElementType | undefined;
 
   return (
-    <div
-      ref={cardRef}
-      className={` px-8 py-16  md:py-20  flex flex-col gap-5         skill-card relative rounded-2xl border border-white/10
-          bg-linear-to-b from-white/4 to-white/1 p-6 mx-5
-          will-change-transform
-        hover:-translate-y-1
-        hover:border-orange-500/40
-        hover:bg-[#1e1c1a]
-        hover:shadow-[0_0_0_1px_rgba(249,115,22,0.2),0_8px_32px_rgba(249,115,22,0.12)]`}
-    >
-      {/* Subtle radial glow behind icon on hover */}
+    <div className="trait-card group relative h-full w-full">
+      {/* coloured glow that wakes up on hover */}
       <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 35%, rgba(249,115,22,0.08) 0%, transparent 70%)",
-        }}
+        aria-hidden
+        className="absolute -inset-5 -z-10 rounded-[2.5rem] bg-linear-to-br from-primary-container/40 to-secondary/30 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
       />
 
-      {/* Icon */}
-      <div className="relative flex items-center justify-center">
-        <Icon
-          className="h-8 w-8 text-orange-500 transition-all duration-300 ease-out group-hover:scale-110 group-hover:text-orange-400 group-hover:drop-shadow-[0_0_8px_rgba(249,115,22,0.7)]"
-          strokeWidth={1.5}
-        />
+      <div
+        className="relative flex h-full flex-col justify-between overflow-hidden rounded-4xl border border-white/20
+                   bg-linear-to-br from-white/20 via-white/5 to-white/10 p-8
+                   backdrop-blur-2xl backdrop-saturate-150
+                   shadow-[0_10px_50px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-1px_0_rgba(255,255,255,0.08)]
+                   transition-[transform,border-color] duration-500 ease-out
+                   group-hover:-translate-y-3 group-hover:border-white/40"
+      >
+        {/* soft specular highlight (top-left) */}
+        <span className="pointer-events-none absolute -left-1/3 -top-1/3 h-2/3 w-full rotate-12 bg-linear-to-b from-white/30 to-transparent opacity-40 blur-2xl" />
+
+        {/* shine sweep on hover */}
+        <span className="pointer-events-none absolute inset-y-0 -left-full w-1/2 -skew-x-12 bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-[400%]" />
+
+        {/* top row: icon + index */}
+        <div className="relative flex items-start justify-between">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/25 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-md">
+            {isValidElement(icon) ? icon : Icon ? <Icon className="h-8 w-8" /> : null}
+          </div>
+          <span className="text-5xl font-extrabold tabular-nums text-white/10 transition-colors duration-500 group-hover:text-white/25">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+
+        {/* bottom: label + description */}
+        <div className="relative">
+          <h3 className="text-2xl font-semibold uppercase tracking-[0.2em] text-zinc-100">
+            {label}
+          </h3>
+          {description && (
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300/80">{description}</p>
+          )}
+          <span className="mt-5 block h-px w-full bg-linear-to-r from-primary-container via-secondary to-transparent opacity-70" />
+        </div>
       </div>
-
-      {/* Label */}
-      <p className="relative text-center text-sm font-semibold leading-snug text-zinc-200 transition-colors duration-300 group-hover:text-white">
-        {label}
-      </p>
-
-      {/* Bottom accent line — slides up on hover */}
-      <span className="absolute bottom-0 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-orange-500 transition-all duration-300 ease-out group-hover:w-12" />
     </div>
   );
 }

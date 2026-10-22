@@ -25,7 +25,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
  *  - < lg  : slides stack vertically, normal page scroll, no pin, no GSAP.
  *  - >= lg : slides sit in a row inside a pinned track that GSAP moves horizontally.
  */
-const SLIDE = "slide relative flex w-full shrink-0 flex-col justify-center lg:h-screen lg:w-screen";
+const SLIDE =
+  "slide relative flex w-full shrink-0 flex-col justify-center lg:h-screen lg:w-screen";
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -33,7 +34,8 @@ export default function About() {
 
   const isDesktop = useMediaQuery(DESKTOP_QUERY);
   // Shared with children (TechnicalForge) so they can sync to the horizontal scroll.
-  const [horizontalTween, setHorizontalTween] = useState<gsap.core.Tween | null>(null);
+  const [horizontalTween, setHorizontalTween] =
+    useState<gsap.core.Tween | null>(null);
 
   useGSAP(
     () => {
@@ -49,7 +51,10 @@ export default function About() {
           reduceMotion: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { isDesktop, reduceMotion } = context.conditions as Record<string, boolean>;
+          const { isDesktop, reduceMotion } = context.conditions as Record<
+            string,
+            boolean
+          >;
 
           // Mobile / tablet: nothing to do, the browser scrolls vertically.
           if (!isDesktop) return;
@@ -79,9 +84,11 @@ export default function About() {
           // Generic reveal for slides that don't run their own animation.
           if (!reduceMotion) {
             slides.forEach((slide, index) => {
-              if (index === 0 || slide.hasAttribute("data-self-animated")) return;
+              if (index === 0 || slide.hasAttribute("data-self-animated"))
+                return;
 
-              const elements = slide.querySelectorAll<HTMLElement>("h2, h3, p, img");
+              const elements =
+                slide.querySelectorAll<HTMLElement>("h2, h3, p, img");
               if (!elements.length) return;
 
               gsap.fromTo(
@@ -99,7 +106,7 @@ export default function About() {
                     start: "left 75%",
                     toggleActions: "play reverse play reverse",
                   },
-                }
+                },
               );
             });
           }
@@ -113,12 +120,12 @@ export default function About() {
             window.removeEventListener("load", refresh);
             setHorizontalTween(null);
           };
-        }
+        },
       );
 
       return () => mm.revert();
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
@@ -149,7 +156,11 @@ export default function About() {
           </div>
 
           {/* Slide 3 */}
-          <div className={`${SLIDE} py-16 lg:py-0`}>
+          {/* Slide 3 */}
+          <div
+            data-self-animated
+            className="slide relative flex w-full shrink-0 flex-col justify-center py-16 lg:h-screen lg:w-max lg:py-0"
+          >
             <SoftSkills />
           </div>
         </div>

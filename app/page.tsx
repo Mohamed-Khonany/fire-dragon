@@ -18,41 +18,49 @@ export default function Root() {
   const [contentVisible, setContentVisible] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // ── ScrollSmoother ──────────────────────────────────────────────
-  useGSAP(() => {
-    smootherRef.current = ScrollSmoother.create({
-      smooth: 2,
-      effects: true,
-      normalizeScroll: true,
-      smoothTouch: 0,
-    });
-    smootherRef.current.paused(true);
-  });
-
   // ── Banner → About zoom-through transition ────────────────────────
   useGSAP(
     () => {
+      smootherRef.current = ScrollSmoother.create({
+        smooth: 2,
+        effects: true,
+        normalizeScroll: true,
+        smoothTouch: 0,
+      });
+      smootherRef.current.paused(true);
       if (!contentVisible) return;
 
       const bannerSection = document.getElementById("banner-section");
-      const fireWrapper = bannerSection?.querySelector<HTMLElement>(".fire-wrapper");
-      const contentEl = bannerSection?.querySelector<HTMLElement>(".banner-content-el");
+      const fireWrapper =
+        bannerSection?.querySelector<HTMLElement>(".fire-wrapper");
+      const contentEl =
+        bannerSection?.querySelector<HTMLElement>(".banner-content-el");
+      const aboutWord =
+        bannerSection?.querySelector<HTMLElement>(".about-word");
       const overlay = overlayRef.current;
 
-      if (!bannerSection || !fireWrapper || !contentEl || !overlay) return;
+      if (
+        !bannerSection ||
+        !fireWrapper ||
+        !contentEl ||
+        !aboutWord ||
+        !overlay
+      )
+        return;
 
       gsap.set(fireWrapper, {
         transformOrigin: "50% 50%",
         willChange: "transform, filter",
       });
       gsap.set(overlay, { opacity: 0 });
+      gsap.set(aboutWord, { transformOrigin: "50% 50%" });
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: bannerSection,
           pin: true,
           start: "top top",
-          end: "+=120%",
+          end: "+=150%", // a bit more scroll distance so the word has room to breathe
           scrub: 1.4,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -60,25 +68,75 @@ export default function Root() {
       });
 
       // Phase 1 (0 – 30%): hero content fades and lifts away
-      tl.to(contentEl, { opacity: 0, y: -50, ease: "power2.in", duration: 0.3 }, 0);
+      tl.to(
+        contentEl,
+        { opacity: 0, y: -50, ease: "power2.in", duration: 0.3 },
+        0,
+      );
 
       // Phase 2 (20 – 90%): fire-wrapper zooms in (camera zoom)
       tl.fromTo(
         fireWrapper,
         { scale: 1, filter: "blur(0px)" },
         { scale: 9, filter: "blur(14px)", ease: "power3.in", duration: 0.7 },
-        0.2
+        0.2,
       );
 
       // Phase 3 (35 – 65%): dark vignette expands from centre
       tl.to(overlay, { opacity: 1, ease: "power2.inOut", duration: 0.3 }, 0.35);
 
-      // Phase 4 (65 – 100%): vignette fades — about section revealed
+      // Phase 4 (65 – 100%): vignette fades, about section revealed
       tl.to(overlay, { opacity: 0, ease: "power2.out", duration: 0.35 }, 0.65);
+
+      // ── "About me" word ──────────────────────────────────────────
+      // Emerges out of the dark vignette: fades in and de-blurs quickly...
+      tl.fromTo(
+        aboutWord,
+        { opacity: 0, filter: "blur(12px)", y: 24 },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          y: 0,
+          ease: "power2.out",
+          duration: 0.25,
+        },
+        0.4,
+      );
+
+      // ...while one continuous scale runs from tiny to big until the timeline ends.
+      // power2.out = fast, confident start that glides to a stop at the end of the scroll.
+      tl.fromTo(
+        aboutWord,
+        { scale: 0.2 },
+        { scale: 1.4, ease: "power2.out", duration: 0.6 },
+        0.4,
+      );
+
+      // Optional: soft fade at the very end so it hands off cleanly to <About />.
+      // Delete this line if you want the word to stay fully visible until the pin releases.
+      tl.fromTo(
+        aboutWord,
+        { opacity: 0, filter: "blur(12px)", y: 24 },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          y: 0,
+          ease: "power2.out",
+          duration: 0.25,
+        },
+        0.4,
+      );
+
+      tl.fromTo(
+        aboutWord,
+        { scale: 0.2 },
+        { scale: 1.4, ease: "power2.out", duration: 0.6 },
+        0.4,
+      );
 
       return () => tl.kill();
     },
-    { dependencies: [contentVisible] }
+    { dependencies: [contentVisible] },
   );
 
   const handleStartReveal = useCallback(() => {
