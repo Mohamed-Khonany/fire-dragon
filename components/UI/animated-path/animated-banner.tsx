@@ -122,6 +122,15 @@ export default function AnimatedBanner({
           <circle className="fire-dot" cx="128.17" cy="74.54" r="1.17" />
 
           {/* Right lines (rotated from Up) */}
+          
+          <Path d="M306.58,165.96h-20.37c-.72,0-1.41.29-1.92.8l-4.28,4.28c-.51,.51,-1.2,.8,-1.92,.8h-9.37" />
+          <circle className="fire-dot" cx="268" cy="171.77" r="1.17" />
+
+          <Path d="M306.58,134.04h-18.37c-.72,0-1.41-.29-1.92-.8l-4.28-4.28c-.51,-.51,-1.2,-.8,-1.92,-.8h-14.37" />
+          <circle className="fire-dot" cx="265.58" cy="128.17" r="1.17" />
+
+          <Line x1="306.58" y1="150" x2="266.58" y2="150" />
+          <circle className="fire-dot" cx="265.58" cy="150" r="1.17" />
 
           <Line x1="186.42" y1="150" x2="232.69" y2="150" />
           <circle className="fire-dot" cx="233.87" cy="150" r="1.17" />
@@ -146,6 +155,15 @@ export default function AnimatedBanner({
 
           {/* Left lines (rotated from Down) */}
 
+          <Path d="M-8,134.04h20.37c.72,0,1.41-.29,1.92-.8l4.28-4.28c.51,-.51,1.2,-.8,1.92,-.8h9.37" />
+          <circle className="fire-dot" cx="30.83" cy="128.17" r="1.17" />
+
+          <Path d="M-10,165.96h18.37c.72,0,1.41.29,1.92.8l4.28,4.28c.51,.51,1.2,.8,1.92,.8h14.37" />
+          <circle className="fire-dot" cx="31.23" cy="171.83" r="1.17" />
+
+          <Line x1="-10" y1="150" x2="30" y2="150" />
+          <circle className="fire-dot" cx="31.23" cy="150" r="1.17" />
+
           <Line x1="113.58" y1="150" x2="67.31" y2="150" />
           <circle className="fire-dot" cx="66.13" cy="150" r="1.17" />
 
@@ -157,7 +175,7 @@ export default function AnimatedBanner({
 
           <Path d="M113.58,173.94h-10.37c-.72,0-1.41.29-1.92.8l-4.28,4.28c-.51,.51,-1.2,.8,-1.92,.8h-12.37" />
           <circle className="fire-dot" cx="81.54" cy="179.81" r="1.17" />
-
+          
           <Path d="M113.58,134.04h-18.37c-.72,0-1.41-.29-1.92-.8l-4.28-4.28c-.51,-.51,-1.2,-.8,-1.92,-.8h-14.37" />
           <circle className="fire-dot" cx="71.54" cy="128.17" r="1.17" />
 
@@ -201,6 +219,8 @@ export default function AnimatedBanner({
 
           <Path d="M113.58 186.42 L102 198 H80 L65 212 H45" />
           <circle className="fire-dot" cx="44" cy="212" r="1.17" />
+
+
         </svg>
       </div>
     </>
