@@ -7,7 +7,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
+    --background: #121414;
     --foreground: #ededed;
   }
 }
@@ -52,4 +52,4 @@ html:not(.site-loaded) #site-header {
   transform: translateY(-80px) !important;
   pointer-events: none !important;
   visibility: hidden !important;
-}
+}

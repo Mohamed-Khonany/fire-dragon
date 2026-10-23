@@ -94,6 +94,17 @@ export default function SiteLoader({
     };
   }, []);
 
+  // Keyboard shortcut: ESC to skip
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleSkip();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // Coordinated GSAP transform from loader to banner page
   const executeTransform = useCallback(() => {
     if (hasTransformed.current) return;
@@ -192,11 +203,15 @@ export default function SiteLoader({
 
     // 5. Part the shutters (top goes up, bottom goes down)
     if (topShutterRef.current && bottomShutterRef.current) {
-      tl.call(() => {
-        if (onStartReveal) {
-          onStartReveal();
-        }
-      }, undefined, "-=0.35");
+      tl.call(
+        () => {
+          if (onStartReveal) {
+            onStartReveal();
+          }
+        },
+        undefined,
+        "-=0.35",
+      );
 
       tl.to(
         topShutterRef.current,
@@ -311,7 +326,6 @@ export default function SiteLoader({
     executeTransform();
   };
 
-
   // Circular gauge calculations
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
@@ -374,7 +388,6 @@ export default function SiteLoader({
       <div className="hud-corner hud-tr z-30" />
       <div className="hud-corner hud-bl z-30" />
       <div className="hud-corner hud-br z-30" />
-
 
       {/* ================= MAIN LOADER STAGE ================= */}
       <div

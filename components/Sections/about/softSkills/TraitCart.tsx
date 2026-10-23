@@ -10,6 +10,7 @@ import {
   Crown,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Path } from "@/components/UI/animated-path/animated-path";
 
 type TraitCardProps = {
   index: number;
@@ -46,8 +47,7 @@ export function TraitCard({ index, label, icon, description }: TraitCardProps) {
       />
 
       <div
-        className="relative flex h-full flex-col justify-between overflow-hidden rounded-4xl border border-white/20
-                   bg-linear-to-br from-white/20 via-white/5 to-white/10 p-8
+        className="relative flex h-full flex-col justify-between overflow-hidden rounded-4xl border border-white/20 p-8
                    backdrop-blur-2xl backdrop-saturate-150
                    shadow-[0_10px_50px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-1px_0_rgba(255,255,255,0.08)]
                    transition-[transform,border-color] duration-500 ease-out
@@ -62,7 +62,11 @@ export function TraitCard({ index, label, icon, description }: TraitCardProps) {
         {/* top row: icon + index */}
         <div className="relative flex items-start justify-between">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/25 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] backdrop-blur-md">
-            {isValidElement(icon) ? icon : Icon ? <Icon className="h-8 w-8" /> : null}
+            {isValidElement(icon) ? (
+              icon
+            ) : Icon ? (
+              <Icon className="h-8 w-8" />
+            ) : null}
           </div>
           <span className="text-5xl font-extrabold tabular-nums text-white/10 transition-colors duration-500 group-hover:text-white/25">
             {String(index + 1).padStart(2, "0")}
@@ -71,11 +75,13 @@ export function TraitCard({ index, label, icon, description }: TraitCardProps) {
 
         {/* bottom: label + description */}
         <div className="relative">
-          <h3 className="text-2xl font-semibold uppercase tracking-[0.2em] text-zinc-100">
+          <h3 className="text-md font-semibold uppercase tracking-[0.2em] text-zinc-100">
             {label}
           </h3>
           {description && (
-            <p className="mt-3 text-sm leading-relaxed text-zinc-300/80">{description}</p>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300/80">
+              {description}
+            </p>
           )}
           <span className="mt-5 block h-px w-full bg-linear-to-r from-primary-container via-secondary to-transparent opacity-70" />
         </div>

@@ -5,6 +5,7 @@ import Banner from "@/components/Sections/hero/banner";
 import Projects from "@/components/Sections/projects/projects";
 import About from "@/components/Sections/about/about";
 import SiteLoader from "@/components/UI/loader/site-loader";
+im
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -22,7 +23,7 @@ export default function Root() {
   useGSAP(
     () => {
       smootherRef.current = ScrollSmoother.create({
-        smooth: 2,
+        smooth: 4,
         effects: true,
         normalizeScroll: true,
         smoothTouch: 0,
@@ -61,7 +62,7 @@ export default function Root() {
           pin: true,
           start: "top top",
           end: "+=150%", // a bit more scroll distance so the word has room to breathe
-          scrub: 1.4,
+          scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -70,7 +71,7 @@ export default function Root() {
       // Phase 1 (0 – 30%): hero content fades and lifts away
       tl.to(
         contentEl,
-        { opacity: 0, y: -50, ease: "power2.in", duration: 0.3 },
+        { opacity: 0, y: -50, ease: "power2.in", duration: 0.3,scale: 1.9 },
         0,
       );
 
@@ -79,11 +80,11 @@ export default function Root() {
         fireWrapper,
         { scale: 1, filter: "blur(0px)" },
         { scale: 9, filter: "blur(14px)", ease: "power3.in", duration: 0.7 },
-        0.2,
+        0.1,
       );
 
       // Phase 3 (35 – 65%): dark vignette expands from centre
-      tl.to(overlay, { opacity: 1, ease: "power2.inOut", duration: 0.3 }, 0.35);
+      // tl.to(overlay, { opacity: 1, ease: "power2.inOut", duration: 0.3 }, 0.35);
 
       // Phase 4 (65 – 100%): vignette fades, about section revealed
       tl.to(overlay, { opacity: 0, ease: "power2.out", duration: 0.35 }, 0.65);

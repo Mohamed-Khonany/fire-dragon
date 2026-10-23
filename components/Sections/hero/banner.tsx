@@ -19,7 +19,6 @@ export default function Banner() {
         >
           <GradientText>About me</GradientText>
         </span>
-        
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter, Montserrat, JetBrains_Mono } from "next/font/google";
 import { Header } from "@/components/UI/layout/header/header";
 import GlowCursor from "@/components/UI/glowCursor/glowCursor";
+import ScrollToTop from "@/components/UI/ScrollToTop/ScrollToTop";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,7 +58,7 @@ export default function RootLayout({
             blendMode="screen"
           />
         </div>
-
+        <ScrollToTop />
         <Header />
         {children}
       </body>
