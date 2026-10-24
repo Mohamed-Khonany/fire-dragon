@@ -5,7 +5,6 @@ import Banner from "@/components/Sections/hero/banner";
 import Projects from "@/components/Sections/projects/projects";
 import About from "@/components/Sections/about/about";
 import SiteLoader from "@/components/UI/loader/site-loader";
-im
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
