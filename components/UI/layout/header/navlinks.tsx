@@ -36,7 +36,7 @@ const navLinks: NavLink[] = [
   {
     id: "about",
     label: "About",
-    activeStart: "-=1000 top",
+    activeStart: "top bottom",
     activeEnd: "+=6450",
   },
   { id: "projects", label: "Projects", activeStart: "top bottom" },
@@ -92,7 +92,7 @@ export const NavLinks = () => {
 
     const el = document.getElementById(link.id);
     if (!el) return;
-    smoother.scrollTo(el, true, link.id === "about" ? "-=1000 top" : "top top");
+    smoother.scrollTo(el, true, link.id === "about" ? "-=780 top" : "top top");
   };
 
   return (
