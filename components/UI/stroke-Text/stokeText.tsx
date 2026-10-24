@@ -412,7 +412,7 @@ const StrokeText = ({
 
   return (
     // no flex-centering here: the text starts at the top and GSAP moves it to the centre
-    <div ref={sectionPinRef} className="relative h-screen w-full">
+    <div id="projects" ref={sectionPinRef} className="relative h-screen w-full">
       <span
         ref={rootRef}
         className={`relative block w-full leading-[0] will-change-transform ${className}`.trim()}

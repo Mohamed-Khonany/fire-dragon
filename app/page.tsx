@@ -23,7 +23,7 @@ export default function Root() {
   useGSAP(
     () => {
       smootherRef.current = ScrollSmoother.create({
-        smooth: 4,
+        smooth: 2,
         effects: true,
         normalizeScroll: true,
         smoothTouch: 0,
@@ -62,7 +62,7 @@ export default function Root() {
           pin: true,
           start: "top top",
           end: "+=150%", // a bit more scroll distance so the word has room to breathe
-          scrub: true,
+          scrub: 2,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -154,12 +154,6 @@ export default function Root() {
         <div id="smooth-content">
           <Banner />
 
-          {/*
-           * Full-screen radial vignette overlay.
-           * Grows from the very centre of the viewport as the banner zooms in,
-           * creating a cinematic "portal iris" before the about section is revealed.
-           * fixed + z-50 so it sits above everything during the transition.
-           */}
           <div
             ref={overlayRef}
             aria-hidden="true"

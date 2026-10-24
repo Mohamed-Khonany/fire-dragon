@@ -54,7 +54,7 @@ export default function NotFound() {
       >
         {/* Top badge */}
         {/* <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-500/6 px-3 py-1.5 text-sm font-semibold text-orange-400"> */}
-          <GradientText className="text-[11px] font-semibold uppercase tracking-[0.2em] flex flex-row gap-1 items-center justify-center"   showBorder={true} colors={["#ff5a00", "#cd9c01"]} animationSpeed={8}>
+          <GradientText className="text-[11px] font-semibold uppercase tracking-[0.2em] flex flex-row gap-1 items-center justify-center"  animationSpeed={8}>
             <Terminal className="h-3.5 w-3.5 text-orange-500" strokeWidth={2} />  Page not found
           </GradientText>
         {/* </div> */}

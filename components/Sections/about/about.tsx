@@ -132,6 +132,7 @@ export default function About() {
     <AboutScrollContext.Provider value={horizontalTween}>
       <section
         ref={sectionRef}
+        id="about"
         className="relative w-full bg-background lg:h-screen lg:overflow-hidden"
       >
         {/* Decorative path: desktop only (it is sized for the pinned viewport) */}

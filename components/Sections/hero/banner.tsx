@@ -12,7 +12,7 @@ export default function Banner() {
       <AnimatedBanner isHome={true} heroData={heroData} />
 
       {/* Centered wrapper: only layout, never animated */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+      <div id="home" className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
         <div className="relative shrink-0 text-[clamp(2.5rem,9vw,8rem)]">
           <AboutSidePath side="top-left" />
 
