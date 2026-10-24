@@ -5,6 +5,7 @@ import Banner from "@/components/Sections/hero/banner";
 import Projects from "@/components/Sections/projects/projects";
 import About from "@/components/Sections/about/about";
 import SiteLoader from "@/components/UI/loader/site-loader";
+import { createAboutPathsTimeline } from "@/components/UI/about-side-path/about-paths-timeline";
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -70,11 +71,11 @@ export default function Root() {
       // Phase 1 (0 – 30%): hero content fades and lifts away
       tl.to(
         contentEl,
-        { opacity: 0, y: -50, ease: "power2.in", duration: 0.3,scale: 1.9 },
+        { opacity: 0, y: -50, ease: "power2.in", duration: 0.3, scale: 1.9 },
         0,
       );
 
-      // Phase 2 (20 – 90%): fire-wrapper zooms in (camera zoom)
+      // Phase 2 (10 – 80%): fire-wrapper zooms in (camera zoom)
       tl.fromTo(
         fireWrapper,
         { scale: 1, filter: "blur(0px)" },
@@ -112,27 +113,12 @@ export default function Root() {
         0.4,
       );
 
-      // Optional: soft fade at the very end so it hands off cleanly to <About />.
-      // Delete this line if you want the word to stay fully visible until the pin releases.
-      tl.fromTo(
-        aboutWord,
-        { opacity: 0, filter: "blur(12px)", y: 24 },
-        {
-          opacity: 1,
-          filter: "blur(0px)",
-          y: 0,
-          ease: "power2.out",
-          duration: 0.25,
-        },
-        0.4,
-      );
-
-      tl.fromTo(
-        aboutWord,
-        { scale: 0.2 },
-        { scale: 1.4, ease: "power2.out", duration: 0.6 },
-        0.4,
-      );
+      // ── Side paths ───────────────────────────────────────────────
+      // Drawn on the SAME scrubbed timeline, so they are tied to scroll position
+      // (and reverse perfectly when scrolling back up).
+      // Starts at 0.42 (just after the word begins to emerge) and is rescaled
+      // to occupy 0.5 timeline units => finishes at 0.92, right before the pin releases.
+      tl.add(createAboutPathsTimeline(bannerSection, 0.5), 0.42);
 
       return () => tl.kill();
     },

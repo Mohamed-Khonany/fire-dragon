@@ -12,6 +12,8 @@ import {
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import AboutSidePath from "@/components/UI/about-side-path/about-side-path";
+import { createAboutPathsTimeline } from "@/components/UI/about-side-path/about-paths-timeline";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -52,6 +54,17 @@ export interface StrokeTextProps {
    * down while you scroll, and lands in the centre exactly when the pin begins (`start`).
    */
   introStart?: string;
+  /* decorative corner paths (the same <AboutSidePath /> used on the About banner) */
+  /** draws a path in the top-left and one in the bottom-right of the word, on the intro timeline */
+  sidePaths?: boolean;
+  /** % of the word's width the paths reach over the word (default 30) */
+  sidePathOverlap?: number;
+  /**
+   * Gap between the paths and the word's box, any CSS length.
+   * Default is negative (fontSize * -0.25 px) because the word's box includes ascender/descender room.
+   * Make it more negative to pull the paths closer to the letters.
+   */
+  sidePathGap?: string;
   /* typography */
   fontSize?: number;
   fontWeight?: number | string;
@@ -90,6 +103,9 @@ const StrokeText = ({
   scrub = 1,
   start = "top top",
   introStart = "top 70%",
+  sidePaths = false,
+  sidePathOverlap = 30,
+  sidePathGap,
   fontSize = 128,
   fontWeight = 800,
   letterSpacing = -4,
@@ -110,6 +126,7 @@ const StrokeText = ({
 
   const characters = useMemo(() => Array.from(String(text ?? "")), [text]);
   const dash = Math.max(fontSize * 7, 200);
+  const svgHeight = Math.round(fontSize * 1.3);
 
   // stable key so a new array literal each render doesn't re-run the animation
   const colorsKey = colors.join("|");
@@ -321,6 +338,14 @@ const StrokeText = ({
         );
       }
 
+      // corner paths: nested into the SAME scrubbed intro timeline, so they are
+      // tied to scroll and travel down with the word. They start once the letters
+      // are mostly drawn (35% in) and finish at ~95% of the intro.
+      if (sidePaths) {
+        const total = tlIntro.duration();
+        tlIntro.add(createAboutPathsTimeline(root, total * 0.6), total * 0.35);
+      }
+
       // travel: top of the section -> vertical centre, spread over the WHOLE intro,
       // so the text keeps moving (and animating) until the pin takes over
       tlIntro.to(
@@ -375,6 +400,7 @@ const StrokeText = ({
         introStart,
         yoyo,
         animationSpeed,
+        sidePaths,
       ],
       revertOnUpdate: true,
     },
@@ -389,14 +415,14 @@ const StrokeText = ({
     <div ref={sectionPinRef} className="relative h-screen w-full">
       <span
         ref={rootRef}
-        className={`block w-full leading-[0] will-change-transform ${className}`.trim()}
+        className={`relative block w-full leading-[0] will-change-transform ${className}`.trim()}
         style={style}
         role="img"
         aria-label={String(text ?? "")}
       >
         <svg
           className="block w-full"
-          style={{ height: `${Math.round(fontSize * 1.3)}px` }}
+          style={{ height: `${svgHeight}px` }}
           viewBox={viewBox}
           preserveAspectRatio="xMidYMid meet"
           aria-hidden="true"
@@ -471,6 +497,47 @@ const StrokeText = ({
             ))}
           </text>
         </svg>
+
+        {/*
+         * Corner paths. The inner "word box" reproduces what the SVG's
+         * preserveAspectRatio="xMidYMid meet" does to the text: same aspect ratio as the
+         * measured text box, as wide as possible (max 100%) but never taller than the SVG.
+         * <AboutSidePath /> positions itself relative to this box, exactly like on the banner.
+         * Only rendered once the text is measured (so there's no flash before GSAP sets
+         * the start state). It lives inside the moving span, so it travels with the word.
+         */}
+        {sidePaths && box && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            style={
+              {
+                // the paths pick up the word's own gradient colours
+                "--about-path-from": colors[0],
+                "--about-path-to": colors[colors.length - 1],
+              } as CSSProperties
+            }
+          >
+            <div
+              className="relative"
+              style={{
+                width: `min(100%, ${(svgHeight * box.width) / box.height}px)`,
+                aspectRatio: `${box.width} / ${box.height}`,
+              }}
+            >
+              <AboutSidePath
+                side="top-left"
+                overlap={sidePathOverlap}
+                gap={sidePathGap ?? `${-fontSize * 0.25}px`}
+              />
+              <AboutSidePath
+                side="bottom-right"
+                overlap={sidePathOverlap}
+                gap={sidePathGap ?? `${-fontSize * 0.25}px`}
+              />
+            </div>
+          </div>
+        )}
       </span>
     </div>
   );

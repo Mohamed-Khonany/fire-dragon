@@ -1,6 +1,5 @@
 "use client";
-// import ProjectsSection from "../projects/projectSection";
-import GradientText from "@/components/UI/fireSpan/gradientText";
+import ProjectsSection from "./projectHero";
 
 import { useRef } from "react";
 import StrokeText from "@/components/UI/stroke-Text/stokeText";
@@ -26,10 +25,10 @@ export default function Projects() {
         fontSize={200}
         fontWeight={800}
         letterSpacing={-4}
-        scrollLength="150%"
+        scrollLength="200%"
         scrub={1}
+        sidePaths
       />
-      {/* <ProjectsSection /> */}
     </div>
   );
 }
